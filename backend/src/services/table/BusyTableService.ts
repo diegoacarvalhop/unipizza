@@ -14,7 +14,7 @@ class BusyTableService {
                 id: tableFind.id
             },
             data: {
-                table_busy: true
+                free: false
             }
         });
 

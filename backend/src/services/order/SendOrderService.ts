@@ -13,7 +13,25 @@ class SendOrderService {
             data: {
                 draft: false
             }
-        })
+        });
+
+        const table = await prismaClient.order.findFirst({
+            where: {
+                id: order_id
+            },
+            select: {
+                table_id: true
+            }
+        });
+
+        await prismaClient.table.update({
+            where: {
+                id: table.table_id
+            },
+            data: {
+                free: false
+            }
+        });
 
         return order;
 

@@ -71,7 +71,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password
       });
       const { id, name, token } = response.data;
-      console.log(id);
       const data = {
         ...response.data
       };

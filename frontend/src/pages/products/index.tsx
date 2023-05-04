@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import styles from './styles.module.scss';
 import { Header } from "../../components/Header";
@@ -42,7 +42,20 @@ export default function Products({ productList, categoryList }: ProductProps) {
     const [imageUrl, setImageUrl] = useState('http://localhost:3333/files/');
     const [modalItem, setModalItem] = useState<ProductItemProps>();
     const [modalEditVisible, setModalEditVisible] = useState(false);
+    const [search, setSearch] = useState(true);
 
+    setTimeout(async function () {
+        setSearch(!search);
+    }, 5000);
+
+    useEffect(() => {
+        async function getTables() {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get('/products');
+            setProducts(response.data);
+        }
+        getTables();
+    }, [search]);
 
     async function handleChangeCategory(event) {
         const apiClient = setupAPIClient();
@@ -123,7 +136,6 @@ export default function Products({ productList, categoryList }: ProductProps) {
                 });
             }
         } catch (error) {
-            console.log(error);
             toast.error("Ocorreu um erro! Erro: " + error.response.data.error, {
                 theme: 'dark'
             });

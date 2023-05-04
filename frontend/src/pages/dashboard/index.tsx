@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { canSSRAuth } from '../../utils/canSSRAuth';
 import Head from 'next/head';
 import styles from './styles.module.scss';
@@ -51,6 +51,20 @@ export default function Dashboard({ orders }: HomeProps) {
     const [modalItem, setModalItem] = useState<OrderItemProps[]>();
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState(true);
+
+    setTimeout(async function () {
+        setSearch(!search);
+    }, 5000);
+
+    useEffect(() => {
+        async function getTables() {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get('/orders');
+            setOrderList(response.data);
+        }
+        getTables();
+    }, [search]);
 
     function handleCloseModal() {
         setModalVisible(false);
@@ -67,7 +81,9 @@ export default function Dashboard({ orders }: HomeProps) {
             setModalItem(response.data);
             setModalVisible(true);
         } catch (error) {
-            toast.error('Houve um erro ao tentar visualizar os itens do pedido! Erro: ' + error.response.data.error);
+            toast.error('Houve um erro ao tentar visualizar os itens do pedido! Erro: ' + error.response.data.error, {
+                theme: 'dark'
+            });
         }
     }
 
@@ -83,7 +99,9 @@ export default function Dashboard({ orders }: HomeProps) {
             setModalVisible(false);
             toast.success('Pedido finalizado com sucesso!');
         } catch (error) {
-            toast.error('Houve um erro ao finalizar o pedido! Erro: ' + error.response.data.error);
+            toast.error('Houve um erro ao finalizar o pedido! Erro: ' + error.response.data.error, {
+                theme: 'dark'
+            });
         }
     }
 
@@ -95,7 +113,9 @@ export default function Dashboard({ orders }: HomeProps) {
             setOrderList(response.data);
             setLoading(false);
         } catch (error) {
-            toast.error("Houve um erro ao atualizar a lista de pedidos! Erro: " + error.response.data.error);
+            toast.error("Houve um erro ao atualizar a lista de pedidos! Erro: " + error.response.data.error, {
+                theme: 'dark'
+            });
         }
     }
 

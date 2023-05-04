@@ -3,7 +3,7 @@ import { CreateTableService } from "../../services/table/CreateTableService";
 
 class CreateTableController {
     async handle(req: Request, res: Response) {
-        const number = req.query.number as string;
+        const { number } = req.body;
         const user_id = req.user_id;
 
         const service = new CreateTableService();

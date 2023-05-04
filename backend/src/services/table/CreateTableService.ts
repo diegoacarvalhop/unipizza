@@ -22,8 +22,6 @@ class CreateTableService {
             numberTable = parseInt(lastTable.number);
         }
 
-        console.log(user_id);
-
         for (let x = 1; x <= numberInt; x++) {
             await prismaClient.table.create({
                 data: {

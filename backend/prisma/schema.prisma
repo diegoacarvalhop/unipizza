@@ -22,6 +22,7 @@ model User {
   products   Product[]
   orders     Order[]
   tables     Table[]
+  Payment    Payment[]
 
   @@map("users")
 }
@@ -63,6 +64,7 @@ model Order {
   draft      Boolean   @default(true)
   name       String?
   paid       Boolean   @default(false)
+  paid_draft String    @default("")
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
   table      Table     @relation(fields: [table_id], references: [id])
@@ -75,17 +77,18 @@ model Order {
 }
 
 model Table {
-  id                String    @id @default(uuid())
-  number            String
-  status            Boolean   @default(true)
-  table_busy        Boolean   @default(false)
-  table_close_bill  Boolean   @default(false)
-  table_call_waiter Boolean   @default(false)
-  created_at        DateTime? @default(now())
-  updated_at        DateTime? @default(now())
-  user              User      @relation(fields: [user_id], references: [id])
-  user_id           String
-  orders            Order[]
+  id          String    @id @default(uuid())
+  number      String
+  status      Boolean   @default(true)
+  free        Boolean   @default(true)
+  close_bill  Boolean   @default(false)
+  call_waiter Boolean   @default(false)
+  created_at  DateTime? @default(now())
+  updated_at  DateTime? @default(now())
+  user        User      @relation(fields: [user_id], references: [id])
+  user_id     String
+  orders      Order[]
+  Payment     Payment[]
 
   @@map("tables")
 }
@@ -101,4 +104,26 @@ model Item {
   product_id String
 
   @@map("items")
+}
+
+model Payment {
+  id            String    @id @default(uuid())
+  total_amount  String
+  amount_paid   String    @default("0")
+  pix           Boolean   @default(false)
+  amount_pix    String    @default("0")
+  money         Boolean   @default(false)
+  amount_money  String    @default("0")
+  debit         Boolean   @default(false)
+  amount_debit  String    @default("0")
+  credit        Boolean   @default(false)
+  amount_credit String    @default("0")
+  created_at    DateTime? @default(now())
+  updated_at    DateTime? @default(now())
+  user          User      @relation(fields: [user_id], references: [id])
+  user_id       String
+  table         Table     @relation(fields: [table_id], references: [id])
+  table_id      String
+
+  @@map("payments")
 }

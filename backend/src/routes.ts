@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import multer from "multer";
 import { CreateUserController } from "./controllers/user/CreateUserController";
 import { AuthUserController } from "./controllers/user/AuthUserController";
@@ -25,11 +25,10 @@ import { ListOrderController } from "./controllers/order/ListOrderController";
 import { ShowOrderDetailController } from "./controllers/order/ShowOrderDetailController";
 import { FinishOrderController } from "./controllers/order/FinishOrderController";
 import { CreateTableController } from "./controllers/table/CreateTableController";
-import { ListProductsMenuController } from "./controllers/menu/ListProductsMenuController";
-import { ListCategoryMenuController } from "./controllers/menu/ListCategoryMenuController";
-import { ListTableMenuController } from "./controllers/menu/ListTableMenuController";
 import { ListTableController } from "./controllers/table/ListTableController";
 import { BusyTableController } from "./controllers/table/BusyTableController";
+import { DisableTableController } from "./controllers/table/DisableTableController";
+import { CreatePaymentController } from "./controllers/payment/CreatePaymentController";
 
 const router = Router();
 
@@ -44,11 +43,12 @@ router.get('/userinfo', isAuthenticated, new DetailUserController().handle);
 router.post('/table', isAuthenticated, new CreateTableController().handle);
 router.get('/tables', isAuthenticated, new ListTableController().handle);
 router.put('/table/busy', isAuthenticated, new BusyTableController().handle);
+router.put('/table/disable', isAuthenticated, new DisableTableController().handle);
+
 
 //Rotas CATEGORY
 router.post('/category', isAuthenticated, new CreateCategoryController().handle);
 router.get('/categories', isAuthenticated, new ListCategoryController().handle);
-router.get('/categories/menu', new ListCategoryMenuController().handle);
 router.get('/category', isAuthenticated, new FindCategoryController().handle);
 router.put('/category/update', isAuthenticated, new EditCategoryController().handle);
 router.put('/category/disable', isAuthenticated, new DisableCategoryController().handle);
@@ -71,9 +71,7 @@ router.get('/orders', isAuthenticated, new ListOrderController().handle);
 router.get('/order/show', isAuthenticated, new ShowOrderDetailController().handle);
 router.put('/order/finish', isAuthenticated, new FinishOrderController().handle);
 
-//Rotas MENU
-router.get('/menu/products', new ListProductsMenuController().handle);
-router.get('/menu/categories', new ListCategoryMenuController().handle);
-router.get('/menu/table', new ListTableMenuController().handle);
+//Rotas PAYMENT
+router.get('/payment', isAuthenticated, new CreatePaymentController().handle);
 
 export { router };

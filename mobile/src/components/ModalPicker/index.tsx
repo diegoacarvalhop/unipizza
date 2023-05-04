@@ -49,6 +49,7 @@ export function ModalPicker({ options, handleCloseModal, selectedItem }: ModalPi
 }
 
 export function ModalPickerTable({ options, handleCloseModal, selectedItem }: ModalPickerTableProps) {
+
     function onPressItem(item: TableProps) {
         selectedItem(item);
         handleCloseModal();

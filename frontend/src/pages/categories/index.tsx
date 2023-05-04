@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Header } from '../../components/Header';
 import { setupAPIClient } from '../../services/api';
 import { canSSRAuth } from '../../utils/canSSRAuth';
@@ -21,11 +21,25 @@ interface CategoryProps {
     categoryList: CategoryItemProps[];
 }
 
-export default function Category({ categoryList }: CategoryProps) {
+export default function Categories({ categoryList }: CategoryProps) {
     const [categories, setCategories] = useState(categoryList || []);
     const [modalItem, setModalItem] = useState<CategoryItemProps>();
     const [modalEditVisible, setModalEditVisible] = useState(false);
     // const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+    const [search, setSearch] = useState(true);
+
+    setTimeout(async function () {
+        setSearch(!search);
+    }, 5000);
+
+    useEffect(() => {
+        async function getTables() {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get('/categories');
+            setCategories(response.data);
+        }
+        getTables();
+    }, [search]);
 
     function handleCloseModal() {
         setModalEditVisible(false);
@@ -122,7 +136,6 @@ export default function Category({ categoryList }: CategoryProps) {
                 });
             }
         } catch (error) {
-            console.log(error);
             toast.error("Ocorreu um erro! Erro: " + error.response.data.error, {
                 theme: 'dark'
             });

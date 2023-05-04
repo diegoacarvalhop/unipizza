@@ -24,7 +24,7 @@ class CreateCategoryService {
             throw new Error("Categoria " + name + " já cadastrada!");
         }
 
-        const category = prismaClient.category.create({
+        const category = await prismaClient.category.create({
             data: {
                 name: name,
                 user_id: user_id

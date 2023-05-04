@@ -25,6 +25,7 @@ export default function Dashboard() {
   useEffect(() => {
     async function getCategories() {
       const response = await api.get('/tables');
+      response.data = response.data.filter((item: { status: boolean; }) => item.status === true);
       setTables(response.data);
       setTableSelected(response.data[0]);
     }

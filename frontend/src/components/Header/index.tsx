@@ -23,6 +23,9 @@ export function Header() {
                     <a className={styles.usuario}>{user?.name}</a>
                 </div>
                 <nav className={styles.nav}>
+                <Link href="/tables" legacyBehavior>
+                        <a>Mesas</a>
+                    </Link>
                     <Link href="/categories" legacyBehavior>
                         <a>Categorias</a>
                     </Link>
