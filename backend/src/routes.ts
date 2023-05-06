@@ -29,6 +29,8 @@ import { ListTableController } from "./controllers/table/ListTableController";
 import { BusyTableController } from "./controllers/table/BusyTableController";
 import { DisableTableController } from "./controllers/table/DisableTableController";
 import { CreatePaymentController } from "./controllers/payment/CreatePaymentController";
+import { ListTableNotificationController } from "./controllers/table/ListTableNotificationController";
+import { UpdateTableController } from "./controllers/table/UpdateTableController";
 
 const router = Router();
 
@@ -44,6 +46,8 @@ router.post('/table', isAuthenticated, new CreateTableController().handle);
 router.get('/tables', isAuthenticated, new ListTableController().handle);
 router.put('/table/busy', isAuthenticated, new BusyTableController().handle);
 router.put('/table/disable', isAuthenticated, new DisableTableController().handle);
+router.get('/tables/notification', isAuthenticated, new ListTableNotificationController().handle);
+router.put('/table/update', isAuthenticated, new UpdateTableController().handle);
 
 
 //Rotas CATEGORY

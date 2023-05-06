@@ -8,9 +8,9 @@ class DisableTableController {
 
         const service = new DisableTableService();
 
-        const category = await service.execute({ table_id, disable });
+        const table = await service.execute({ table_id, disable });
 
-        return res.json(category);
+        return res.json(table);
     }
 }
 

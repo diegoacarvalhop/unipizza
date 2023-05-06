@@ -1,6 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, Modal } from 'react-native'
-import { AuthContext } from '../../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamsList } from '../../routes/app.routes';
@@ -9,14 +8,15 @@ import { api } from '../../services/api';
 import { ModalPickerTable } from '../../components/ModalPicker';
 
 export type TableProps = {
-  id: string;
-  number: string;
-  status: boolean;
+  id: string | undefined;
+  number: string | undefined;
+  status: boolean | undefined;
+  close_bill: boolean | undefined;
+  call_waiter: boolean | undefined;
 }
 
 export default function Dashboard() {
   const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
-  const { user, signOut } = useContext(AuthContext);
   const [tables, setTables] = useState<TableProps[] | []>([]);
   const [tableSelected, setTableSelected] = useState<TableProps | undefined>();
   const [modalTableVisible, setModalTableVisible] = useState(false);
@@ -53,23 +53,17 @@ export default function Dashboard() {
     });
   }
 
-  async function handleLogOut() {
-    await signOut();
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.user}>
-          <TouchableOpacity>
-            <Feather name="user" size={28} color="#FFF" />
-          </TouchableOpacity>
-          <Text style={styles.userText}>{user.name}</Text>
-        </View>
-        <TouchableOpacity
-          onPress={handleLogOut}>
-          <Feather name="log-out" size={28} color="#FF3F4B" />
-        </TouchableOpacity>
+        <Feather
+          style={styles.goBack}
+          name='arrow-left'
+          size={35}
+          onPress={() => navigation.goBack()}
+          title="Voltar"
+          color="#FF3F4B"
+        />
       </View>
       <View style={styles.containerContent}>
         <Text style={styles.title}>Novo pedido</Text>
@@ -121,15 +115,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
 
-  user: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-
-  userText: {
-    color: '#FFF',
-    fontSize: 28,
-    marginLeft: '10%'
+  goBack: {
+    marginRight: '10%'
   },
 
   container: {

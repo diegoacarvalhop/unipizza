@@ -1,12 +1,18 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Dashboard from '../pages/Dashboard';
+import Options from '../pages/Options';
+import Table from '../pages/Table';
+import Dashboard, { TableProps } from '../pages/Dashboard';
 import Order from '../pages/Order';
 import FinishOrder from '../pages/FinishOrder';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
 export type StackParamsList = {
+  Options: undefined;
+  Table: {
+    tables: TableProps[] | []
+  };
   Dashboard: undefined;
   Order: {
     table: string | undefined;
@@ -26,6 +32,14 @@ export default function AppRoutes() {
 
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="Options"
+        component={Options}
+        options={{ headerShown: false }} />
+      <Stack.Screen
+        name="Table"
+        component={Table}
+        options={{ headerShown: false }} />
       <Stack.Screen
         name="Dashboard"
         component={Dashboard}
