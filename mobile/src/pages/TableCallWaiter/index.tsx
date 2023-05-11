@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native'
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamsList } from '../../routes/app.routes';
@@ -8,16 +8,17 @@ import { api } from '../../services/api';
 import { ModalPickerTable } from '../../components/ModalPicker';
 import { TableProps } from '../Dashboard';
 import Switch from '../../components/Switch';
+import { Footer } from '../../components/Footer';
 
 type RouteDetailParams = {
-    Table: {
+    TableCallWaiter: {
         tables: TableProps[] | [];
     }
 }
 
-type TableRouteProps = RouteProp<RouteDetailParams, 'Table'>;
+type TableRouteProps = RouteProp<RouteDetailParams, 'TableCallWaiter'>;
 
-export default function Table() {
+export default function TableCallWaiter() {
     const route = useRoute<TableRouteProps>();
     const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
     const [tables, setTables] = useState<TableProps[] | []>(route.params.tables);
@@ -32,20 +33,20 @@ export default function Table() {
     }, 50);
 
     async function handleCallWaiter() {
+        const data: TableProps = {
+            id: tableSelected?.id,
+            number: undefined,
+            status: undefined,
+            close_bill: undefined,
+            call_waiter: !tableSelected?.call_waiter
+        }
+
+        setTableSelected(data);
+
         await api.put('/table/update', {
             table_id: tableSelected?.id,
             type: 'call_waiter',
-            disable: !tableSelected?.call_waiter
-        });
-
-        setSearchTable(!searchTable);
-    }
-
-    async function handleCloseBill() {
-        await api.put('/table/update', {
-            table_id: tableSelected?.id,
-            type: 'close_bill',
-            disable: !tableSelected?.close_bill
+            disable: tableSelected?.call_waiter
         });
 
         setSearchTable(!searchTable);
@@ -53,7 +54,7 @@ export default function Table() {
 
     useEffect(() => {
         async function getTablesNotification() {
-            const response = await api.get('/tables/notification');
+            const response = await api.get('/tables/call_waiter');
             setTables(response.data);
             setTableSelected(response.data[0]);
             navigation.reset;
@@ -77,50 +78,43 @@ export default function Table() {
                     color="#FF3F4B"
                 />
             </View>
-            <View style={styles.containerContent}>
-                <Text style={styles.title}>Mesas</Text>
-                {
-                    tables.length !== 0 && (
-                        <TouchableOpacity
-                            style={styles.input}
-                            onPress={() => setModalTableVisible(true)}>
-                            <View style={styles.inputContent}>
-                                <Text style={{ color: '#FFF', marginTop: '1%', fontSize: 16 }}>
-                                    Mesa {tableSelected?.number}
-                                </Text>
-                                <Feather name="chevron-down" size={28} color="#FFF" />
-                            </View>
-                        </TouchableOpacity>
-                    )
-                }
-                <View style={styles.switch}>
+            <ScrollView>
+                <View style={styles.containerContent}>
+                    <Text style={styles.title}>Mesas</Text>
                     {
-                        tableSelected?.call_waiter && (
-                            <View style={styles.switchContentCallWaiter}>
-                                <Text style={styles.switchContentText}>Liberar Garçom</Text>
-                                <Switch value={tableSelected?.call_waiter} onChange={handleCallWaiter} />
-                            </View>
+                        tables.length !== 0 && (
+                            <TouchableOpacity
+                                style={styles.input}
+                                onPress={() => setModalTableVisible(true)}>
+                                <View style={styles.inputContent}>
+                                    <Text style={{ color: '#FFF', marginTop: '1%', fontSize: 16 }}>
+                                        Mesa {tableSelected?.number}
+                                    </Text>
+                                    <Feather name="chevron-down" size={28} color="#FFF" />
+                                </View>
+                            </TouchableOpacity>
                         )
                     }
-                    {
-                        tableSelected?.close_bill && (
-                            <View style={styles.switchContentCloseBill}>
-                                <Text style={styles.switchContentText}>Liberar Conta    </Text>
-                                <Switch value={tableSelected?.close_bill} onChange={handleCloseBill} />
-                            </View>
-                        )
-                    }
+                    <View style={styles.switch}>
+
+                        <View style={styles.switchContentCallWaiter}>
+                            <Text style={styles.switchContentText}>Liberar Garçom</Text>
+                            <Switch value={tableSelected?.call_waiter} onChange={handleCallWaiter} />
+                        </View>
+
+                    </View>
                 </View>
-            </View>
-            <Modal
-                transparent={true}
-                visible={modalTableVisible}
-                animationType="fade">
-                <ModalPickerTable
-                    handleCloseModal={() => setModalTableVisible(false)}
-                    options={tables}
-                    selectedItem={handleChangeTable} />
-            </Modal>
+                <Modal
+                    transparent={true}
+                    visible={modalTableVisible}
+                    animationType="fade">
+                    <ModalPickerTable
+                        handleCloseModal={() => setModalTableVisible(false)}
+                        options={tables}
+                        selectedItem={handleChangeTable} />
+                </Modal>
+            </ScrollView>
+            <Footer />
         </SafeAreaView>
     )
 }

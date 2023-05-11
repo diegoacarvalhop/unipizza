@@ -1,7 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Options from '../pages/Options';
-import Table from '../pages/Table';
+import TableCallWaiter from '../pages/TableCallWaiter';
+import TableCloseBill from '../pages/TableCloseBill';
 import Dashboard, { TableProps } from '../pages/Dashboard';
 import Order from '../pages/Order';
 import FinishOrder from '../pages/FinishOrder';
@@ -10,7 +11,10 @@ import { Feather } from '@expo/vector-icons';
 
 export type StackParamsList = {
   Options: undefined;
-  Table: {
+  TableCallWaiter: {
+    tables: TableProps[] | []
+  };
+  TableCloseBill: {
     tables: TableProps[] | []
   };
   Dashboard: undefined;
@@ -37,8 +41,12 @@ export default function AppRoutes() {
         component={Options}
         options={{ headerShown: false }} />
       <Stack.Screen
-        name="Table"
-        component={Table}
+        name="TableCallWaiter"
+        component={TableCallWaiter}
+        options={{ headerShown: false }} />
+        <Stack.Screen
+        name="TableCloseBill"
+        component={TableCloseBill}
         options={{ headerShown: false }} />
       <Stack.Screen
         name="Dashboard"

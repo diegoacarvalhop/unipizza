@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, Alert, Modal, FlatList } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, Alert, Modal, FlatList, ScrollView } from "react-native";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import { Feather } from '@expo/vector-icons';
 import { api } from "../../services/api";
@@ -7,6 +7,7 @@ import { ModalPicker } from "../../components/ModalPicker";
 import { ListItem } from "../../components/ListItem";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParamsList } from "../../routes/app.routes";
+import { Footer } from "../../components/Footer";
 
 type RouteDetailParams = {
     Order: {
@@ -129,93 +130,96 @@ export default function Order() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.content}>
-                <View style={styles.headerTable}>
-                    <Text style={styles.title}>Mesa {route.params.table}</Text>
+            <ScrollView>
+                <View style={styles.content}>
+                    <View style={styles.headerTable}>
+                        <Text style={styles.title}>Mesa {route.params.table}</Text>
+                        {
+                            items.length === 0 && (
+                                <TouchableOpacity
+                                    onPress={handleDeleteOrder}>
+                                    <Feather name="trash-2" size={28} color="#FF3F4B" />
+                                </TouchableOpacity>
+                            )
+                        }
+                    </View>
                     {
-                        items.length === 0 && (
+                        categories.length !== 0 && (
                             <TouchableOpacity
-                                onPress={handleDeleteOrder}>
-                                <Feather name="trash-2" size={28} color="#FF3F4B" />
+                                style={styles.input}
+                                onPress={() => setModalCategoryVisible(true)}>
+                                <View style={styles.inputContent}>
+                                    <Text style={{ color: '#FFF', marginTop: '1%', fontSize: 16 }}>
+                                        {categorySelected?.name}
+                                    </Text>
+                                    <Feather name="chevron-down" size={28} color="#FFF" />
+                                </View>
                             </TouchableOpacity>
                         )
                     }
-                </View>
-                {
-                    categories.length !== 0 && (
+                    {
+                        products.length !== 0 && (
+                            <TouchableOpacity
+                                style={styles.input}
+                                onPress={() => setModalProductVisible(true)}>
+                                <View style={styles.inputContent}>
+                                    <Text style={{ color: '#FFF', marginTop: '1%', fontSize: 16 }}>
+                                        {productSelected?.name}
+                                    </Text>
+                                    <Feather name="chevron-down" size={28} color="#FFF" />
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    }
+                    <View style={styles.qtdContainer}>
+                        <Text style={styles.qtdText}>Quantidade</Text>
+                        <TextInput
+                            style={[styles.input, { width: '60%', textAlign: 'center', fontSize: 16 }]}
+                            placeholderTextColor="#F0F0F0"
+                            keyboardType="numeric"
+                            value={amount}
+                            onChangeText={setAmount} />
+                    </View>
+                    <View style={styles.action}>
                         <TouchableOpacity
-                            style={styles.input}
-                            onPress={() => setModalCategoryVisible(true)}>
-                            <View style={styles.inputContent}>
-                                <Text style={{ color: '#FFF', marginTop: '1%', fontSize: 16 }}>
-                                    {categorySelected?.name}
-                                </Text>
-                                <Feather name="chevron-down" size={28} color="#FFF" />
-                            </View>
+                            onPress={handleAddItem}
+                            style={styles.buttonAdd}>
+                            <Text style={styles.buttonText}>+</Text>
                         </TouchableOpacity>
-                    )
-                }
-                {
-                    products.length !== 0 && (
                         <TouchableOpacity
-                            style={styles.input}
-                            onPress={() => setModalProductVisible(true)}>
-                            <View style={styles.inputContent}>
-                                <Text style={{ color: '#FFF', marginTop: '1%', fontSize: 16 }}>
-                                    {productSelected?.name}
-                                </Text>
-                                <Feather name="chevron-down" size={28} color="#FFF" />
-                            </View>
+                            onPress={handleFinishOrder}
+                            disabled={items.length === 0}
+                            style={[styles.buttonNext, { opacity: items.length === 0 ? 0.3 : 1 }]}>
+                            <Text style={styles.buttonText}>Avançar</Text>
                         </TouchableOpacity>
-                    )
-                }
-                <View style={styles.qtdContainer}>
-                    <Text style={styles.qtdText}>Quantidade</Text>
-                    <TextInput
-                        style={[styles.input, { width: '60%', textAlign: 'center', fontSize: 16 }]}
-                        placeholderTextColor="#F0F0F0"
-                        keyboardType="numeric"
-                        value={amount}
-                        onChangeText={setAmount} />
+                    </View>
+                    <FlatList
+                        showsVerticalScrollIndicator={false}
+                        style={{ flex: 1, marginTop: 24 }}
+                        data={items}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => <ListItem data={item} deleteItem={handleRemoveItem} />} />
+                    <Modal
+                        transparent={true}
+                        visible={modalCategoryVisible}
+                        animationType="fade">
+                        <ModalPicker
+                            handleCloseModal={() => setModalCategoryVisible(false)}
+                            options={categories}
+                            selectedItem={handleChangeCategory} />
+                    </Modal>
+                    <Modal
+                        transparent={true}
+                        visible={modalProductVisible}
+                        animationType="fade">
+                        <ModalPicker
+                            handleCloseModal={() => setModalProductVisible(false)}
+                            options={products}
+                            selectedItem={handleChangeProduct} />
+                    </Modal>
                 </View>
-                <View style={styles.action}>
-                    <TouchableOpacity
-                        onPress={handleAddItem}
-                        style={styles.buttonAdd}>
-                        <Text style={styles.buttonText}>+</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={handleFinishOrder}
-                        disabled={items.length === 0}
-                        style={[styles.buttonNext, { opacity: items.length === 0 ? 0.3 : 1 }]}>
-                        <Text style={styles.buttonText}>Avançar</Text>
-                    </TouchableOpacity>
-                </View>
-                <FlatList
-                    showsVerticalScrollIndicator={false}
-                    style={{ flex: 1, marginTop: 24 }}
-                    data={items}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <ListItem data={item} deleteItem={handleRemoveItem} />} />
-                <Modal
-                    transparent={true}
-                    visible={modalCategoryVisible}
-                    animationType="fade">
-                    <ModalPicker
-                        handleCloseModal={() => setModalCategoryVisible(false)}
-                        options={categories}
-                        selectedItem={handleChangeCategory} />
-                </Modal>
-                <Modal
-                    transparent={true}
-                    visible={modalProductVisible}
-                    animationType="fade">
-                    <ModalPicker
-                        handleCloseModal={() => setModalProductVisible(false)}
-                        options={products}
-                        selectedItem={handleChangeProduct} />
-                </Modal>
-            </View>
+            </ScrollView>
+            <Footer />
         </SafeAreaView>
     )
 }
@@ -224,14 +228,12 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         justifyContent: 'center',
+        paddingHorizontal: '5%'
     },
 
     container: {
         flex: 1,
         backgroundColor: '#1D1D2D',
-        paddingVertical: '5%',
-        paddingEnd: '4%',
-        paddingStart: '4%'
     },
 
     headerTable: {

@@ -1,10 +1,11 @@
 import React from "react";
-import { SafeAreaView, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { SafeAreaView, Text, StyleSheet, TouchableOpacity, ScrollView, View } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { api } from "../../services/api";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParamsList } from "../../routes/app.routes";
+import { Footer } from "../../components/Footer";
 
 type RouteDetailParams = {
     FinishOrder: {
@@ -35,27 +36,37 @@ export default function FinishOrder() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.alert}>Você deseja finalizar este pedido?</Text>
-            <Text style={styles.title}>Mesa {route.params.table}</Text>
-            <TouchableOpacity
-                onPress={handleFinish}
-                style={styles.button}>
-                <Text style={styles.textButton}>Finalizar pedido</Text>
-                <Feather name="shopping-cart" size={25} color="#1D1D2E" />
-            </TouchableOpacity>
+            <ScrollView>
+                <View style={styles.content}>
+                    <Text style={styles.alert}>Você deseja finalizar este pedido?</Text>
+                    <Text style={styles.title}>Mesa {route.params.table}</Text>
+                    <TouchableOpacity
+                        onPress={handleFinish}
+                        style={styles.button}>
+                        <Text style={styles.textButton}>Finalizar pedido</Text>
+                        <Feather name="shopping-cart" size={25} color="#1D1D2E" />
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+            <Footer />
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    content: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: '5%',
+        paddingVertical: '70%'
+    },
+
     container: {
         flex: 1,
-        backgroundColor: '#1D1D2E',
-        paddingVertical: '5%',
-        paddingHorizontal: '5%',
-        alignItems: 'center',
-        justifyContent: 'center'
+        backgroundColor: '#1D1D2D',
     },
+
 
     alert: {
         fontSize: 20,

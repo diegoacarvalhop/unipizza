@@ -29,8 +29,9 @@ import { ListTableController } from "./controllers/table/ListTableController";
 import { BusyTableController } from "./controllers/table/BusyTableController";
 import { DisableTableController } from "./controllers/table/DisableTableController";
 import { CreatePaymentController } from "./controllers/payment/CreatePaymentController";
-import { ListTableNotificationController } from "./controllers/table/ListTableNotificationController";
+import { ListTableCallWaiterController } from "./controllers/table/ListTableCallWaiterController";
 import { UpdateTableController } from "./controllers/table/UpdateTableController";
+import { ListTableCloseBillController } from "./controllers/table/ListTableCloseBillController";
 
 const router = Router();
 
@@ -46,7 +47,8 @@ router.post('/table', isAuthenticated, new CreateTableController().handle);
 router.get('/tables', isAuthenticated, new ListTableController().handle);
 router.put('/table/busy', isAuthenticated, new BusyTableController().handle);
 router.put('/table/disable', isAuthenticated, new DisableTableController().handle);
-router.get('/tables/notification', isAuthenticated, new ListTableNotificationController().handle);
+router.get('/tables/call_waiter', isAuthenticated, new ListTableCallWaiterController().handle);
+router.get('/tables/close_bill', isAuthenticated, new ListTableCloseBillController().handle);
 router.put('/table/update', isAuthenticated, new UpdateTableController().handle);
 
 

@@ -1,17 +1,15 @@
 import prismaClient from "../../prisma";
 
-class ListTableNotificationService {
+class ListTableCloseBillService {
     async execute() {
 
         const tables = await prismaClient.table.findMany({
             where: {
                 OR: [
                     {
-                        call_waiter: true
-                    },
-                    {
                         close_bill: true
                     }
+
                 ]
             },
             orderBy: {
@@ -23,4 +21,4 @@ class ListTableNotificationService {
     }
 }
 
-export { ListTableNotificationService }
+export { ListTableCloseBillService }

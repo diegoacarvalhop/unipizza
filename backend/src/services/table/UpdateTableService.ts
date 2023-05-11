@@ -15,7 +15,7 @@ class UpdateTableService {
                     id: table_id
                 },
                 data: {
-                    call_waiter: disable
+                    call_waiter: !disable
                 }
             });
             return table;
@@ -25,7 +25,7 @@ class UpdateTableService {
                     id: table_id
                 },
                 data: {
-                    close_bill: disable
+                    close_bill: !disable
                 }
             });
             return table;

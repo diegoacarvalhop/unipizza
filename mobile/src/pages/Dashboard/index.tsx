@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, Modal } from 'react-native'
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, Modal, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamsList } from '../../routes/app.routes';
 import { Feather } from '@expo/vector-icons';
 import { api } from '../../services/api';
 import { ModalPickerTable } from '../../components/ModalPicker';
+import { Footer } from '../../components/Footer';
 
 export type TableProps = {
   id: string | undefined;
@@ -65,34 +66,37 @@ export default function Dashboard() {
           color="#FF3F4B"
         />
       </View>
-      <View style={styles.containerContent}>
-        <Text style={styles.title}>Novo pedido</Text>
-        {
-          tables.length !== 0 && (
-            <TouchableOpacity
-              style={styles.input}
-              onPress={() => setModalTableVisible(true)}>
-              <View style={styles.inputContent}>
-                <Text style={{ color: '#FFF', marginTop: '1%', fontSize: 16 }}>
-                  Mesa {tableSelected?.number}
-                </Text>
-                <Feather name="chevron-down" size={28} color="#FFF" />
-              </View>
-            </TouchableOpacity>
-          )
-        }
-        <TextInput
-          style={[styles.input, { width: '90%', fontSize: 16, marginTop: 16 }]}
-          placeholderTextColor="#F0F0F0"
-          placeholder='Informe o nome do cliente'
-          value={name}
-          onChangeText={setName} />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={openOrder}>
-          <Text style={styles.buttonText}>Abrir Mesa</Text>
-        </TouchableOpacity>
-      </View>
+      <ScrollView>
+        <View style={styles.containerContent}>
+          <Text style={styles.title}>Novo pedido</Text>
+          {
+            tables.length !== 0 && (
+              <TouchableOpacity
+                style={styles.input}
+                onPress={() => setModalTableVisible(true)}>
+                <View style={styles.inputContent}>
+                  <Text style={{ color: '#FFF', marginTop: '1%', fontSize: 16 }}>
+                    Mesa {tableSelected?.number}
+                  </Text>
+                  <Feather name="chevron-down" size={28} color="#FFF" />
+                </View>
+              </TouchableOpacity>
+            )
+          }
+          <TextInput
+            style={[styles.input, { width: '90%', fontSize: 16, marginTop: 16 }]}
+            placeholderTextColor="#F0F0F0"
+            placeholder='Informe o nome do cliente'
+            value={name}
+            onChangeText={setName} />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={openOrder}>
+            <Text style={styles.buttonText}>Abrir Mesa</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+      <Footer />
       <Modal
         transparent={true}
         visible={modalTableVisible}
@@ -125,10 +129,10 @@ const styles = StyleSheet.create({
   },
 
   containerContent: {
-    flex: 0.8,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 15,
+    paddingVertical: '40%',
   },
 
   inputContent: {
