@@ -32,6 +32,8 @@ import { CreatePaymentController } from "./controllers/payment/CreatePaymentCont
 import { ListTableCallWaiterController } from "./controllers/table/ListTableCallWaiterController";
 import { UpdateTableController } from "./controllers/table/UpdateTableController";
 import { ListTableCloseBillController } from "./controllers/table/ListTableCloseBillController";
+import { DeletePaymentController } from "./controllers/payment/DeletePaymentController";
+import { FinishPaymentController } from "./controllers/payment/FinishPaymentController";
 
 const router = Router();
 
@@ -79,5 +81,7 @@ router.put('/order/finish', isAuthenticated, new FinishOrderController().handle)
 
 //Rotas PAYMENT
 router.get('/payment', isAuthenticated, new CreatePaymentController().handle);
+router.delete('/payment', isAuthenticated, new DeletePaymentController().handle);
+router.put('/payment', isAuthenticated, new FinishPaymentController().handle);
 
 export { router };

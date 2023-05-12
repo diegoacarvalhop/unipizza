@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native'
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, TextInput } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StackParamsList } from '../../routes/app.routes';
@@ -7,7 +7,6 @@ import { Feather } from '@expo/vector-icons';
 import { api } from '../../services/api';
 import { ModalPickerTable } from '../../components/ModalPicker';
 import { TableProps } from '../Dashboard';
-// import Switch from '../../components/Switch';
 import { Footer } from '../../components/Footer';
 import { Col, Row, Grid } from "react-native-easy-grid";
 
@@ -24,9 +23,14 @@ type ItemsProps = {
     price: string;
 }
 
+type PaymentProps = {
+    id: string;
+}
+
 type CloseBillProps = {
     itemsCloseBill: ItemsProps[];
     totalBill: number;
+    payment: PaymentProps;
 }
 
 type TableRouteProps = RouteProp<RouteDetailParams, 'TableCloseBill'>;
@@ -40,32 +44,17 @@ export default function TableCloseBill() {
     const [searchTable, setSearchTable] = useState(true);
     const [itemsCloseBill, setItemsCloseBill] = useState<CloseBillProps>();
     const [visibleBill, setVisibleBill] = useState(false);
+    const [money, setMoney] = useState('');
+    const [pix, setPix] = useState('');
+    const [debit, setDebit] = useState('');
+    const [credit, setCredit] = useState('');
+
 
     setTimeout(async function () {
         if (tables.length === 0) {
             navigation.navigate('Options');
         }
     }, 50);
-
-    // async function handleCloseBill() {
-    //     const data: TableProps = {
-    //         id: tableSelected?.id,
-    //         number: undefined,
-    //         status: undefined,
-    //         close_bill: !tableSelected?.close_bill,
-    //         call_waiter: undefined
-    //     }
-
-    //     setTableSelected(data);
-
-    //     await api.put('/table/update', {
-    //         table_id: tableSelected?.id,
-    //         type: 'close_bill',
-    //         disable: tableSelected?.close_bill
-    //     });
-
-    //     setSearchTable(!searchTable);
-    // }
 
     async function handleCloseBill() {
         const response = await api.get('/payment', {
@@ -74,7 +63,6 @@ export default function TableCloseBill() {
             }
         });
 
-        console.log(response.data);
         setItemsCloseBill(response.data);
         setVisibleBill(true);
     }
@@ -93,25 +81,58 @@ export default function TableCloseBill() {
         setTableSelected(item);
     }
 
-    async function deleteBill() {
+    async function handleDeletePayment() {
+        await api.delete('/payment', {
+            params: {
+                payment_id: itemsCloseBill?.payment.id
+            }
+        });
+        setItemsCloseBill(undefined);
+        setVisibleBill(false);
+        setSearchTable(!searchTable);
+    }
 
+    async function handleFinishPayment() {
+        const totalPaid = Number(money) + Number(pix) + Number(debit) + Number(credit);
+        if(totalPaid !== itemsCloseBill?.totalBill) {
+            alert('Valor pago diferente do valor total da conta!');
+            return;
+        }
+        await api.put('/payment', {
+            payment_id: itemsCloseBill.payment.id,
+            debit: debit,
+            credit: credit,
+            pix: pix,
+            money: money
+        });
+        setSearchTable(!searchTable);
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Feather
-                    style={styles.goBack}
-                    name='arrow-left'
-                    size={35}
-                    onPress={() => navigation.goBack()}
-                    title="Voltar"
-                    color="#FF3F4B"
-                />
-            </View>
+            {
+                itemsCloseBill?.itemsCloseBill.length === undefined && (
+                    <View style={styles.header}>
+                        <Feather
+                            style={styles.goBack}
+                            name='arrow-left'
+                            size={35}
+                            onPress={() => navigation.goBack()}
+                            title="Voltar"
+                            color="#FF3F4B"
+                        />
+                    </View>
+                )
+            }
             <ScrollView>
                 <View style={styles.containerContent}>
-                    <Text style={styles.title}>Mesas</Text>
+                    <Text style={
+                        itemsCloseBill?.itemsCloseBill.length === undefined && (
+                            styles.title
+                        ) || (
+                            [styles.title, { marginTop: '16.9%' }]
+                        )
+                    }>Mesas</Text>
                     {
                         tables.length !== 0 && (
                             <TouchableOpacity
@@ -127,17 +148,11 @@ export default function TableCloseBill() {
                         )
                     }
                     <TouchableOpacity
-                        style={visibleBill === true && styles.buttonDisabled || styles.buttonEnabled}
+                        style={[styles.buttonEnabled, { opacity: itemsCloseBill?.itemsCloseBill.length !== undefined ? 0.3 : 1 }]}
                         disabled={visibleBill}
                         onPress={handleCloseBill}>
                         <Text style={styles.buttonText}>Gerar Conta</Text>
                     </TouchableOpacity>
-                    {/* <View style={styles.switch}>
-                        <View style={styles.switchContentCloseBill}>
-                            <Text style={styles.switchContentText}>Liberar Conta    </Text>
-                            <Switch value={tableSelected?.close_bill} onChange={handleCloseBill} />
-                        </View>
-                    </View> */}
                 </View>
                 {
                     itemsCloseBill?.itemsCloseBill.length !== undefined && (
@@ -217,6 +232,59 @@ export default function TableCloseBill() {
                         </View>
                     )
                 }
+                {
+                    itemsCloseBill?.itemsCloseBill.length !== undefined && (
+                        <View style={styles.payment}>
+                            <TextInput
+                                style={[styles.input, { width: '100%', fontSize: 16, marginTop: 16 }]}
+                                placeholderTextColor="#F0F0F0"
+                                placeholder='Valor Dinheiro'
+                                value={money}
+                                onChangeText={setMoney} />
+                            <TextInput
+                                style={[styles.input, { width: '100%', fontSize: 16, marginTop: 16 }]}
+                                placeholderTextColor="#F0F0F0"
+                                placeholder='Valor PIX'
+                                value={pix}
+                                onChangeText={setPix} />
+                            <TextInput
+                                style={[styles.input, { width: '100%', fontSize: 16, marginTop: 16 }]}
+                                placeholderTextColor="#F0F0F0"
+                                placeholder='Valor Débito'
+                                value={debit}
+                                onChangeText={setDebit} />
+                            <TextInput
+                                style={[styles.input, { width: '100%', fontSize: 16, marginTop: 16 }]}
+                                placeholderTextColor="#F0F0F0"
+                                placeholder='Valor Crédito'
+                                value={credit}
+                                onChangeText={setCredit} />
+                        </View>
+                    )
+                }
+                {
+                    itemsCloseBill?.itemsCloseBill.length !== undefined && (
+                        <View style={styles.action}>
+                            <TouchableOpacity
+                                onPress={handleDeletePayment}
+                                style={styles.buttonDelete}>
+                                <Feather
+                                    style={styles.delete}
+                                    name='trash'
+                                    size={35}
+                                    title="Deletar"
+                                    color="#FF3F4B"
+                                />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={handleFinishPayment}
+                                style={styles.buttonCloseBill}>
+                                <Text style={styles.buttonText}>Registrar Pagamento</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    )
+                }
                 <Modal
                     transparent={true}
                     visible={modalTableVisible}
@@ -245,16 +313,19 @@ const styles = StyleSheet.create({
         marginRight: '10%'
     },
 
+    delete: {
+        marginRight: '10%'
+    },
+
     container: {
         flex: 1,
         backgroundColor: '#1d1d2e',
     },
 
     containerContent: {
-        flex: 0.8,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 15,
     },
 
     inputContent: {
@@ -319,16 +390,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 
-    buttonDisabled: {
-        width: '90%',
-        height: 40,
-        backgroundColor: '#71b996',
-        borderRadius: 10,
-        marginVertical: 18,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-
     buttonText: {
         fontSize: 18,
         color: '#101026',
@@ -345,6 +406,38 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 16,
         textAlign: 'center'
+    },
+
+    action: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+        paddingTop: '5%',
+        paddingHorizontal: '5%'
+    },
+
+    payment: {
+        flexDirection: 'column',
+        width: '100%',
+        justifyContent: 'space-between',
+        paddingTop: '5%',
+        paddingHorizontal: '5%'
+    },
+    
+
+    buttonDelete: {
+
+    },
+
+    buttonCloseBill: {
+        backgroundColor: '#3FFFA3',
+        borderRadius: 10,
+        height: 40,
+        width: '80%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: '5%'
     }
+
 
 })

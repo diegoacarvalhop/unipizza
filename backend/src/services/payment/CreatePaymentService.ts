@@ -77,10 +77,13 @@ class CreatePaymentService {
                 table_id: table_id,
                 total_amount: totalBill.toString(),
                 user_id: user_id
+            }, 
+            select: {
+                id: true
             }
         });
 
-        return { itemsCloseBill, totalBill };
+        return { itemsCloseBill, totalBill, payment };
     }
 }
 
