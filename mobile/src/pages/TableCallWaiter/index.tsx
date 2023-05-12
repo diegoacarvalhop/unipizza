@@ -96,12 +96,10 @@ export default function TableCallWaiter() {
                         )
                     }
                     <View style={styles.switch}>
-
                         <View style={styles.switchContentCallWaiter}>
                             <Text style={styles.switchContentText}>Liberar Garçom</Text>
                             <Switch value={tableSelected?.call_waiter} onChange={handleCallWaiter} />
                         </View>
-
                     </View>
                 </View>
                 <Modal

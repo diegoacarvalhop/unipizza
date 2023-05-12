@@ -6,6 +6,7 @@ interface PaymentRequest {
 }
 
 interface ItemProps {
+    id: string;
     amount: number;
     name: string;
     price: string;
@@ -61,6 +62,7 @@ class CreatePaymentService {
             });
 
             const itemAdd: ItemProps = {
+                id: items[x].product_id,
                 amount: items[x]._sum.amount,
                 name: product.name,
                 price: product.price
@@ -78,7 +80,7 @@ class CreatePaymentService {
             }
         });
 
-        return ({ itemsCloseBill, totalBill });
+        return { itemsCloseBill, totalBill };
     }
 }
 

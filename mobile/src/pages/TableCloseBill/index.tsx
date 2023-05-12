@@ -7,13 +7,26 @@ import { Feather } from '@expo/vector-icons';
 import { api } from '../../services/api';
 import { ModalPickerTable } from '../../components/ModalPicker';
 import { TableProps } from '../Dashboard';
-import Switch from '../../components/Switch';
+// import Switch from '../../components/Switch';
 import { Footer } from '../../components/Footer';
+import { Col, Row, Grid } from "react-native-easy-grid";
 
 type RouteDetailParams = {
     TableCloseBill: {
         tables: TableProps[] | [];
     }
+}
+
+type ItemsProps = {
+    id: string;
+    amount: number;
+    name: string;
+    price: string;
+}
+
+type CloseBillProps = {
+    itemsCloseBill: ItemsProps[];
+    totalBill: number;
 }
 
 type TableRouteProps = RouteProp<RouteDetailParams, 'TableCloseBill'>;
@@ -25,6 +38,8 @@ export default function TableCloseBill() {
     const [tableSelected, setTableSelected] = useState<TableProps | undefined>();
     const [modalTableVisible, setModalTableVisible] = useState(false);
     const [searchTable, setSearchTable] = useState(true);
+    const [itemsCloseBill, setItemsCloseBill] = useState<CloseBillProps>();
+    const [visibleBill, setVisibleBill] = useState(false);
 
     setTimeout(async function () {
         if (tables.length === 0) {
@@ -32,24 +47,36 @@ export default function TableCloseBill() {
         }
     }, 50);
 
+    // async function handleCloseBill() {
+    //     const data: TableProps = {
+    //         id: tableSelected?.id,
+    //         number: undefined,
+    //         status: undefined,
+    //         close_bill: !tableSelected?.close_bill,
+    //         call_waiter: undefined
+    //     }
+
+    //     setTableSelected(data);
+
+    //     await api.put('/table/update', {
+    //         table_id: tableSelected?.id,
+    //         type: 'close_bill',
+    //         disable: tableSelected?.close_bill
+    //     });
+
+    //     setSearchTable(!searchTable);
+    // }
+
     async function handleCloseBill() {
-        const data: TableProps = {
-            id: tableSelected?.id,
-            number: undefined,
-            status: undefined,
-            close_bill: !tableSelected?.close_bill,
-            call_waiter: undefined
-        }
-
-        setTableSelected(data);
-
-        await api.put('/table/update', {
-            table_id: tableSelected?.id,
-            type: 'close_bill',
-            disable: tableSelected?.close_bill
+        const response = await api.get('/payment', {
+            params: {
+                table_id: tableSelected?.id
+            }
         });
 
-        setSearchTable(!searchTable);
+        console.log(response.data);
+        setItemsCloseBill(response.data);
+        setVisibleBill(true);
     }
 
     useEffect(() => {
@@ -64,6 +91,10 @@ export default function TableCloseBill() {
 
     function handleChangeTable(item: TableProps) {
         setTableSelected(item);
+    }
+
+    async function deleteBill() {
+
     }
 
     return (
@@ -95,13 +126,97 @@ export default function TableCloseBill() {
                             </TouchableOpacity>
                         )
                     }
-                    <View style={styles.switch}>
+                    <TouchableOpacity
+                        style={visibleBill === true && styles.buttonDisabled || styles.buttonEnabled}
+                        disabled={visibleBill}
+                        onPress={handleCloseBill}>
+                        <Text style={styles.buttonText}>Gerar Conta</Text>
+                    </TouchableOpacity>
+                    {/* <View style={styles.switch}>
                         <View style={styles.switchContentCloseBill}>
                             <Text style={styles.switchContentText}>Liberar Conta    </Text>
                             <Switch value={tableSelected?.close_bill} onChange={handleCloseBill} />
                         </View>
-                    </View>
+                    </View> */}
                 </View>
+                {
+                    itemsCloseBill?.itemsCloseBill.length !== undefined && (
+                        <View style={styles.header}>
+                            <Grid>
+                                <Col size={13}>
+                                    <Row>
+                                        <Text style={styles.itemsTextHeader}>Item</Text>
+                                    </Row>
+                                </Col>
+                                <Col size={3} style={{ alignItems: 'center' }}>
+                                    <Row>
+                                        <Text style={styles.itemsTextHeader}>Qtd</Text>
+                                    </Row>
+                                </Col>
+                                <Col size={6} style={{ alignItems: 'center' }}>
+                                    <Row>
+                                        <Text style={styles.itemsTextHeader}>V.Un</Text>
+                                    </Row>
+                                </Col>
+                                <Col size={5} style={{ alignItems: 'center' }}>
+                                    <Row>
+                                        <Text style={styles.itemsTextHeader}>V.Total</Text>
+                                    </Row>
+                                </Col>
+                            </Grid>
+                        </View>
+                    )
+                }
+                {
+                    itemsCloseBill?.itemsCloseBill.length !== undefined && (
+                        itemsCloseBill?.itemsCloseBill.map(item => {
+                            return (
+                                <View key={item.id} style={styles.header}>
+                                    <Grid>
+                                        <Col size={13}>
+                                            <Row>
+                                                <Text style={styles.itemsText}>{item.name}</Text>
+                                            </Row>
+                                        </Col>
+                                        <Col size={3} style={{ alignItems: 'center' }}>
+                                            <Row>
+                                                <Text style={styles.itemsText}>{item.amount}</Text>
+                                            </Row>
+                                        </Col>
+                                        <Col size={6} style={{ alignItems: 'center' }}>
+                                            <Row>
+                                                <Text style={styles.itemsText}>R$ {item.price},00</Text>
+                                            </Row>
+                                        </Col>
+                                        <Col size={5} style={{ alignItems: 'center' }}>
+                                            <Row>
+                                                <Text style={styles.itemsText}>R$ {Number(item.price) * item.amount},00</Text>
+                                            </Row>
+                                        </Col>
+                                    </Grid>
+                                </View>
+                            )
+                        })
+                    )
+                }
+                {
+                    itemsCloseBill?.itemsCloseBill.length !== undefined && (
+                        <View style={styles.header}>
+                            <Grid>
+                                <Col size={15} style={{ alignItems: 'flex-end' }} >
+                                    <Row>
+                                        <Text style={styles.itemsTextHeader}>Total:</Text>
+                                    </Row>
+                                </Col>
+                                <Col size={10} style={{ alignItems: 'flex-end' }}>
+                                    <Row>
+                                        <Text style={styles.itemsTextHeader}>R${itemsCloseBill?.totalBill},00</Text>
+                                    </Row>
+                                </Col>
+                            </Grid>
+                        </View>
+                    )
+                }
                 <Modal
                     transparent={true}
                     visible={modalTableVisible}
@@ -192,5 +307,44 @@ const styles = StyleSheet.create({
     switchContentText: {
         fontSize: 25,
         color: '#FFF'
+    },
+
+    buttonEnabled: {
+        width: '90%',
+        height: 40,
+        backgroundColor: '#3FFFA3',
+        borderRadius: 10,
+        marginVertical: 18,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    buttonDisabled: {
+        width: '90%',
+        height: 40,
+        backgroundColor: '#71b996',
+        borderRadius: 10,
+        marginVertical: 18,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    buttonText: {
+        fontSize: 18,
+        color: '#101026',
+        fontWeight: 'bold'
+    },
+
+    itemsTextHeader: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+
+    itemsText: {
+        color: '#FFF',
+        fontSize: 16,
+        textAlign: 'center'
     }
+
 })
