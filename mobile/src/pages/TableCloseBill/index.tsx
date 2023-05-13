@@ -285,7 +285,7 @@ export default function TableCloseBill() {
                                 style={styles.buttonDelete}>
                                 <Feather
                                     style={styles.delete}
-                                    name='trash'
+                                    name='trash-2'
                                     size={35}
                                     title="Deletar"
                                     color="#FF3F4B"
