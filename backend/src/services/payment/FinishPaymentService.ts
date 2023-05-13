@@ -17,6 +17,7 @@ class FinishPaymentService {
                 id: payment_id
             },
             data: {
+                amount_paid: (Number(debit) + Number(credit) + Number(pix) + Number(money)).toString(),
                 amount_debit: debit,
                 amount_credit: credit,
                 amount_pix: pix,

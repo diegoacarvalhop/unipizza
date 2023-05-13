@@ -110,13 +110,9 @@ model Payment {
   id            String    @id @default(uuid())
   total_amount  String
   amount_paid   String    @default("0")
-  pix           Boolean   @default(false)
   amount_pix    String    @default("0")
-  money         Boolean   @default(false)
   amount_money  String    @default("0")
-  debit         Boolean   @default(false)
   amount_debit  String    @default("0")
-  credit        Boolean   @default(false)
   amount_credit String    @default("0")
   created_at    DateTime? @default(now())
   updated_at    DateTime? @default(now())

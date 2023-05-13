@@ -144,6 +144,7 @@ export default function Product({ categoryList }: CategoryProps) {
                             onChange={(event) => setName(event.target.value)}
                             type="text"
                             placeholder="Digite o nome do produto"
+                            maxLength={20}
                         />
                         <Input
                             value={price}

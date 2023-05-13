@@ -44,10 +44,10 @@ export default function TableCloseBill() {
     const [searchTable, setSearchTable] = useState(true);
     const [itemsCloseBill, setItemsCloseBill] = useState<CloseBillProps>();
     const [visibleBill, setVisibleBill] = useState(false);
-    const [money, setMoney] = useState('');
-    const [pix, setPix] = useState('');
-    const [debit, setDebit] = useState('');
-    const [credit, setCredit] = useState('');
+    const [money, setMoney] = useState('0');
+    const [pix, setPix] = useState('0');
+    const [debit, setDebit] = useState('0');
+    const [credit, setCredit] = useState('0');
 
 
     setTimeout(async function () {
@@ -94,7 +94,7 @@ export default function TableCloseBill() {
 
     async function handleFinishPayment() {
         const totalPaid = Number(money) + Number(pix) + Number(debit) + Number(credit);
-        if(totalPaid !== itemsCloseBill?.totalBill) {
+        if (totalPaid !== itemsCloseBill?.totalBill) {
             alert('Valor pago diferente do valor total da conta!');
             return;
         }
@@ -235,30 +235,45 @@ export default function TableCloseBill() {
                 {
                     itemsCloseBill?.itemsCloseBill.length !== undefined && (
                         <View style={styles.payment}>
-                            <TextInput
-                                style={[styles.input, { width: '100%', fontSize: 16, marginTop: 16 }]}
-                                placeholderTextColor="#F0F0F0"
-                                placeholder='Valor Dinheiro'
-                                value={money}
-                                onChangeText={setMoney} />
-                            <TextInput
-                                style={[styles.input, { width: '100%', fontSize: 16, marginTop: 16 }]}
-                                placeholderTextColor="#F0F0F0"
-                                placeholder='Valor PIX'
-                                value={pix}
-                                onChangeText={setPix} />
-                            <TextInput
-                                style={[styles.input, { width: '100%', fontSize: 16, marginTop: 16 }]}
-                                placeholderTextColor="#F0F0F0"
-                                placeholder='Valor Débito'
-                                value={debit}
-                                onChangeText={setDebit} />
-                            <TextInput
-                                style={[styles.input, { width: '100%', fontSize: 16, marginTop: 16 }]}
-                                placeholderTextColor="#F0F0F0"
-                                placeholder='Valor Crédito'
-                                value={credit}
-                                onChangeText={setCredit} />
+                            <View style={styles.paid}>
+                                <Text style={styles.textPaid}>Dinheiro</Text>
+                                <TextInput
+                                    style={[styles.input, { width: '50%', fontSize: 16, marginTop: 16 }]}
+                                    placeholderTextColor="#F0F0F0"
+                                    keyboardType="numeric"
+                                    value={money}
+                                    onChangeText={setMoney} />
+                            </View>
+                            <View style={styles.paid}>
+                                <Text style={styles.textPaid}>PIX</Text>
+                                <TextInput
+                                    style={[styles.input, { width: '50%', fontSize: 16, marginTop: 16 }]}
+                                    placeholderTextColor="#F0F0F0"
+                                    placeholder='Valor PIX'
+                                    keyboardType="numeric"
+                                    value={pix}
+                                    onChangeText={setPix} />
+                            </View>
+                            <View style={styles.paid}>
+                                <Text style={styles.textPaid}>Débito</Text>
+                                <TextInput
+                                    style={[styles.input, { width: '50%', fontSize: 16, marginTop: 16 }]}
+                                    placeholderTextColor="#F0F0F0"
+                                    placeholder='Valor Débito'
+                                    keyboardType="numeric"
+                                    value={debit}
+                                    onChangeText={setDebit} />
+                            </View>
+                            <View style={styles.paid}>
+                                <Text style={styles.textPaid}>Crédito</Text>
+                                <TextInput
+                                    style={[styles.input, { width: '50%', fontSize: 16, marginTop: 16 }]}
+                                    placeholderTextColor="#F0F0F0"
+                                    placeholder='Valor Crédito'
+                                    keyboardType="numeric"
+                                    value={credit}
+                                    onChangeText={setCredit} />
+                            </View>
                         </View>
                     )
                 }
@@ -423,7 +438,7 @@ const styles = StyleSheet.create({
         paddingTop: '5%',
         paddingHorizontal: '5%'
     },
-    
+
 
     buttonDelete: {
 
@@ -437,7 +452,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: '5%'
-    }
+    },
 
+    paid: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+
+    textPaid: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+        paddingTop: 15
+    },
 
 })
