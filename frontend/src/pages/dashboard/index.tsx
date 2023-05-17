@@ -97,7 +97,9 @@ export default function Dashboard({ orders }: HomeProps) {
             const response = await apiClient.get('/orders');
             setOrderList(response.data);
             setModalVisible(false);
-            toast.success('Pedido finalizado com sucesso!');
+            toast.success('Pedido finalizado com sucesso!', {
+                theme: 'dark'
+            });
         } catch (error) {
             toast.error('Houve um erro ao finalizar o pedido! Erro: ' + error.response.data.error, {
                 theme: 'dark'

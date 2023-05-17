@@ -32,14 +32,18 @@ class AuthUserService {
         });
 
         if (!user) {
-            throw new Error("Usuário e(ou) senha incorreto(s)!");
+            throw new Error("Usuário não encontrado!");
         }
 
         //Verificar se a senha está incorreta
         const passwordMatch = await compare(password, user.password);
 
         if (!passwordMatch) {
-            throw ("Usuário e(ou) Senha incorreto(s)!")
+            throw new Error("Senha incorreta!");
+        }
+
+        if(!user.status) {
+            throw new Error('Usuário desabilitado!');
         }
 
         //Se deu tudo certo, vamos gerar o token pro usuário

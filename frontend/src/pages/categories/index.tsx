@@ -190,12 +190,6 @@ export default function Categories({ categoryList }: CategoryProps) {
                                                                 onClick={() => handleOpenModalEdit(item)}>
                                                                 <FiEdit size={24} color='#D9D910' />
                                                             </button>
-                                                            {/* <button
-                                                            title="Deletar"
-                                                            className={styles.button}
-                                                            onClick={() => handleOpenModalDelete(item)}>
-                                                            <FiTrash size={24} color='#FF3F4B' />
-                                                            </button> */}
                                                             <SwitchCategory
                                                                 isChecked={item.status}
                                                                 itemCategory={item}

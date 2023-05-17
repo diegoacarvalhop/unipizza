@@ -3,11 +3,18 @@ import styles from "./styles.module.scss";
 import { CategoryItemProps } from "../../../pages/categories";
 import { ProductItemProps } from "../../../pages/products";
 import { TableItemProps } from "../../../pages/tables";
+import { UserItemProps } from "../../../pages/users";
 
 interface InputPropsCategory extends InputHTMLAttributes<HTMLInputElement> {
     isChecked: boolean;
     itemCategory: CategoryItemProps
     handleDisableCategory: (id: string, disable: boolean) => void;
+}
+
+interface InputPropsUser extends InputHTMLAttributes<HTMLInputElement> {
+    isChecked: boolean;
+    itemUser: UserItemProps
+    handleDisableUser: (id: string, disable: boolean) => void;
 }
 
 interface InputPropsTableDisable extends InputHTMLAttributes<HTMLInputElement> {
@@ -73,6 +80,20 @@ export function SwitchCategory({ isChecked, itemCategory, handleDisableCategory 
                 type="checkbox"
                 checked={isChecked}
                 onChange={() => handleDisableCategory(itemCategory.id, itemCategory.status)} />
+            <span
+                className={styles.switch}
+                title="Habilitar / Desabilitar" />
+        </label>
+    );
+}
+
+export function SwitchUser({ isChecked, itemUser, handleDisableUser }: InputPropsUser) {
+    return (
+        <label className={styles.toggleSwitchDisable}>
+            <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={() => handleDisableUser(itemUser.id, itemUser.status)} />
             <span
                 className={styles.switch}
                 title="Habilitar / Desabilitar" />

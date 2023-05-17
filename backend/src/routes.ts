@@ -34,6 +34,10 @@ import { UpdateTableController } from "./controllers/table/UpdateTableController
 import { ListTableCloseBillController } from "./controllers/table/ListTableCloseBillController";
 import { DeletePaymentController } from "./controllers/payment/DeletePaymentController";
 import { FinishPaymentController } from "./controllers/payment/FinishPaymentController";
+import { ListUserController } from "./controllers/user/ListUserController";
+import { DisableUserController } from "./controllers/user/DisableUserController";
+import { UpdateUserController } from "./controllers/user/UpdateUserController";
+import { ChangePasswordUserController } from "./controllers/user/ChangePasswordUserController";
 
 const router = Router();
 
@@ -43,6 +47,10 @@ const upload = multer(uploadConfig.upload("./tmp"));
 router.post('/users', new CreateUserController().handle);
 router.post('/session', new AuthUserController().handle);
 router.get('/userinfo', isAuthenticated, new DetailUserController().handle);
+router.get('/users', isAuthenticated, new ListUserController().handle);
+router.put('/user/disable', isAuthenticated, new DisableUserController().handle);
+router.put('/user/update', isAuthenticated, new UpdateUserController().handle);
+router.put('/user/password', isAuthenticated, new ChangePasswordUserController().handle);
 
 //Rotas TABLE
 router.post('/table', isAuthenticated, new CreateTableController().handle);

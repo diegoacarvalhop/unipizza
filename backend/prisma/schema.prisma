@@ -16,6 +16,7 @@ model User {
   name       String
   email      String
   password   String
+  status     Boolean    @default(true)
   created_at DateTime?  @default(now())
   updated_at DateTime?  @default(now())
   categories Category[]

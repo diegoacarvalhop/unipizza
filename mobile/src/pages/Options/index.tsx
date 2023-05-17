@@ -94,7 +94,8 @@ export default function Options() {
                         <Text style={styles.buttonText}>Pedido</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.button}
+                        style={[styles.button, { opacity: !tablesCallWaiterNotification ? 0.3 : 1 }]}
+                        disabled={!tablesCallWaiterNotification}
                         onPress={() => {
                             tablesCallWaiterNotification === true && openTableCallWaiter()
                         }}>
@@ -108,7 +109,8 @@ export default function Options() {
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.button}
+                        style={[styles.button, { opacity: !tablesCloseBillNotification ? 0.3 : 1 }]}
+                        disabled={!tablesCloseBillNotification}
                         onPress={() => {
                             tablesCloseBillNotification === true && openTableCloseBill()
                         }}>
