@@ -1,3 +1,4 @@
+import { validate } from "email-validator";
 import prismaClient from "../../prisma";
 
 interface UserRequest {
@@ -25,6 +26,10 @@ class UpdateUserService {
                 email: true
             }
         });
+
+        if (!validate(email)) {
+            throw new Error("E-mail inválido!");
+        }
 
         if(JSON.stringify(userUpdate) === JSON.stringify(userBase)) {
             return "Nada para atualizar!";
