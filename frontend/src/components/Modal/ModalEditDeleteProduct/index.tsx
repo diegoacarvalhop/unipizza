@@ -13,12 +13,12 @@ interface ModalEditProductProps {
     handleEditProduct: (product: ProductItemProps) => void;
 }
 
-// interface ModalDeleteCategoryProps {
-//     isOpen: boolean;
-//     onRequestClose: () => void;
-//     category: CategoryItemProps;
-//     handleDeleteCategory: (category: CategoryItemProps) => void;
-// }
+interface ModalDeleteProductProps {
+    isOpen: boolean;
+    onRequestClose: () => void;
+    product: ProductItemProps;
+    handleDeleteProduct: (category: ProductItemProps) => void;
+}
 
 export function ModalEditProduct({ isOpen, onRequestClose, product, handleEditProduct }: ModalEditProductProps) {
 
@@ -74,48 +74,48 @@ export function ModalEditProduct({ isOpen, onRequestClose, product, handleEditPr
     )
 }
 
-// export function ModalDeleteCatergory({ isOpen, onRequestClose, category, handleDeleteCategory }: ModalDeleteCategoryProps) {
+export function ModalDeleteProduct({ isOpen, onRequestClose, product, handleDeleteProduct }: ModalDeleteProductProps) {
 
-//     const customStyles = {
-//         content: {
-//             top: '50%',
-//             bottom: 'auto',
-//             left: '50%',
-//             right: 'auto',
-//             padding: '30px',
-//             transform: 'translate(-50%, -50%)',
-//             backgroundColor: '#1D1D2E',
-//             borderRadius: '1rem'
-//         }
-//     };
+    const customStyles = {
+        content: {
+            top: '50%',
+            bottom: 'auto',
+            left: '50%',
+            right: 'auto',
+            padding: '30px',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: '#1D1D2E',
+            borderRadius: '1rem'
+        }
+    };
 
-//     function handleDelete() {
-//         handleDeleteCategory(category);
-//     }
+    function handleDelete() {
+        handleDeleteProduct(product);
+    }
 
-//     return (
-//         <Modal
-//             isOpen={isOpen}
-//             onRequestClose={onRequestClose}
-//             style={customStyles}>
-//             <button
-//                 type='button'
-//                 onClick={onRequestClose}
-//                 className='react-modal-close'
-//                 style={{ background: 'transparent', border: 0 }}>
-//                 <FiX size={45} color='#FF3F4B' className={styles.close} />
-//             </button>
-//             <div className={styles.container}>
-//                 <h1>Deletar Categoria</h1>
-//                 <div
-//                     className={styles.form}>
-//                     <span className={styles.mensagemDelete}>Deseja realmente deletar a categoria?</span>
-//                     <ButtonRed
-//                         onClick={handleDelete}>
-//                         Deletar
-//                     </ButtonRed>
-//                 </div>
-//             </div>
-//         </Modal>
-//     )
-// }
+    return (
+        <Modal
+            isOpen={isOpen}
+            onRequestClose={onRequestClose}
+            style={customStyles}>
+            <button
+                type='button'
+                onClick={onRequestClose}
+                className='react-modal-close'
+                style={{ background: 'transparent', border: 0 }}>
+                <FiX size={45} color='#FF3F4B' className={styles.close} />
+            </button>
+            <div className={styles.container}>
+                <h1>Deletar Produto</h1>
+                <div
+                    className={styles.form}>
+                    <span className={styles.mensagemDelete}>Deseja realmente deletar o produto?</span>
+                    <ButtonRed
+                        onClick={handleDelete}>
+                        Deletar
+                    </ButtonRed>
+                </div>
+            </div>
+        </Modal>
+    )
+}

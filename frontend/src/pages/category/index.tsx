@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 import { setupAPIClient } from "../../services/api";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { Footer } from "../../components/Footer";
+import Link from "next/link";
+import { FiList } from "react-icons/fi";
 
 export default function Category() {
     const [name, setName] = useState('');
@@ -36,7 +38,16 @@ export default function Category() {
             <div>
                 <Header />
                 <main className={styles.container}>
-                    <h1>Cadastrar Categorias</h1>
+                    <div className={styles.containerHead}>
+                        <h1>Cadastrar Categorias</h1>
+                        <button
+                            title="Listar Categorias"
+                            className={styles.button}>
+                            <Link href="/categories" legacyBehavior>
+                                <a><FiList size={50} /></a>
+                            </Link>
+                        </button>
+                    </div>
                     <form
                         onSubmit={handleCategory}
                         className={styles.form}>

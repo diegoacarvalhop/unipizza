@@ -12,9 +12,27 @@
     }
 
     h1 {
+        padding-top: 1.5rem;
         margin: 1rem 0 2rem 0rem;
         color: var(--white);
     }
+}
+
+.containerHead {
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+
+    svg {
+        color: var(--green-700);
+    }
+}
+
+.button {
+    background: transparent;
+    border: 0;
+    padding: 1rem 0 0 0.5rem;
+    margin-right: 1rem;
 }
 
 .form {

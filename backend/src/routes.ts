@@ -39,6 +39,8 @@ import { DisableUserController } from "./controllers/user/DisableUserController"
 import { UpdateUserController } from "./controllers/user/UpdateUserController";
 import { ChangePasswordUserController } from "./controllers/user/ChangePasswordUserController";
 import { ListProductsMenuController } from "./controllers/menu/ListProductsMenuController";
+import { DeleteCategoryController } from "./controllers/category/DeleteCategoryController";
+import { DeleteProductController } from "./controllers/product/DeleteProductController";
 
 const router = Router();
 
@@ -69,6 +71,7 @@ router.get('/categories', isAuthenticated, new ListCategoryController().handle);
 router.get('/category', isAuthenticated, new FindCategoryController().handle);
 router.put('/category/update', isAuthenticated, new EditCategoryController().handle);
 router.put('/category/disable', isAuthenticated, new DisableCategoryController().handle);
+router.delete('/category', isAuthenticated, new DeleteCategoryController().handle);
 
 //Rotas PRODUCT
 router.post('/product', isAuthenticated, upload.single('file'), new CreateProductController().handle);
@@ -77,6 +80,7 @@ router.get('/product/bycategory', isAuthenticated, new ListByCategoryController(
 router.get('/products', isAuthenticated, new ListProductController().handle);
 router.put('/product/update', isAuthenticated, new EditProductController().handle);
 router.put('/product/disable', isAuthenticated, new DisableProductController().handle);
+router.delete('/product', isAuthenticated, new DeleteProductController().handle);
 
 //Rotas ORDER
 router.post('/order', isAuthenticated, new CreateOrderController().handle);
@@ -95,5 +99,6 @@ router.put('/payment', isAuthenticated, new FinishPaymentController().handle);
 
 //Rotas MENU
 router.get('/menu', new ListProductsMenuController().handle);
+router.get('/menu/categories', new ListCategoryController().handle);
 
 export { router };

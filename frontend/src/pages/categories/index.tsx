@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import Link from 'next/link';
 // import { ModalDeleteCatergory, ModalEditCatergory } from '../../components/Modal/ModalEditDeleteCategory';
 import { Footer } from '../../components/Footer';
-import { ModalEditCatergory } from '../../components/Modal/ModalEditDeleteCategory';
+import { ModalDeleteCatergory, ModalEditCatergory } from '../../components/Modal/ModalEditDeleteCategory';
 import { SwitchCategory } from '../../components/ui/Switch';
 
 export type CategoryItemProps = {
@@ -25,7 +25,7 @@ export default function Categories({ categoryList }: CategoryProps) {
     const [categories, setCategories] = useState(categoryList || []);
     const [modalItem, setModalItem] = useState<CategoryItemProps>();
     const [modalEditVisible, setModalEditVisible] = useState(false);
-    // const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+    const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
     const [search, setSearch] = useState(true);
 
     setTimeout(async function () {
@@ -43,7 +43,7 @@ export default function Categories({ categoryList }: CategoryProps) {
 
     function handleCloseModal() {
         setModalEditVisible(false);
-        // setModalDeleteVisible(false);
+        setModalDeleteVisible(false);
     }
 
     async function handleOpenModalEdit(category: CategoryItemProps) {
@@ -63,20 +63,20 @@ export default function Categories({ categoryList }: CategoryProps) {
         }
     }
 
-    // async function handleOpenModalDelete(category: CategoryItemProps) {
-    //     try {
-    //         const apiClient = setupAPIClient();
-    //         const response = await apiClient.get('/category', {
-    //             params: {
-    //                 category_id: category.id,
-    //             }
-    //         });
-    //         setModalItem(response.data);
-    //         setModalDeleteVisible(true);
-    //     } catch (error) {
-    //         toast.error('Houve um erro ao pesquisar a categoria! Erro: ' + error.response.data.error);
-    //     }
-    // }
+    async function handleOpenModalDelete(category: CategoryItemProps) {
+        try {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get('/category', {
+                params: {
+                    category_id: category.id,
+                }
+            });
+            setModalItem(response.data);
+            setModalDeleteVisible(true);
+        } catch (error) {
+            toast.error('Houve um erro ao pesquisar a categoria! Erro: ' + error.response.data.error);
+        }
+    }
 
     async function handleEditCategory(category: CategoryItemProps) {
         try {
@@ -99,23 +99,27 @@ export default function Categories({ categoryList }: CategoryProps) {
         }
     }
 
-    // async function handleDeleteCategory(category: CategoryItemProps) {
-    //     try {
-    //         const apiClient = setupAPIClient();
+    async function handleDeleteCategory(category: CategoryItemProps) {
+        try {
+            const apiClient = setupAPIClient();
 
-    //         const responseDeleted = await apiClient.delete('/category/delete', {
-    //             params: {
-    //                 category_id: category.id
-    //             }
-    //         });
-    //         toast.success('Categoria deletada com sucesso!');
-    //         const response = await apiClient.get('/categories');
-    //         setCategories(response.data);
-    //         setModalDeleteVisible(false);
-    //     } catch (error) {
-    //         toast.error("Houve um erro ao deletar a categoria! Erro: " + error.response.data.error);
-    //     }
-    // }
+            const responseDeleted = await apiClient.delete('/category', {
+                params: {
+                    category_id: category.id
+                }
+            });
+            toast.success('Categoria deletada com sucesso!', {
+                theme: 'dark'
+            });
+            const response = await apiClient.get('/categories');
+            setCategories(response.data);
+            setModalDeleteVisible(false);
+        } catch (error) {
+            toast.error("Houve um erro ao deletar a categoria! Erro: " + error.response.data.error, {
+                theme: 'dark'
+            });
+        }
+    }
 
     async function handleDisableCategory(id: string, disable: boolean) {
         try {
@@ -190,6 +194,12 @@ export default function Categories({ categoryList }: CategoryProps) {
                                                                 onClick={() => handleOpenModalEdit(item)}>
                                                                 <FiEdit size={24} color='#D9D910' />
                                                             </button>
+                                                            <button
+                                                                title="Deletar"
+                                                                className={styles.button}
+                                                                onClick={() => handleOpenModalDelete(item)}>
+                                                                <FiTrash size={24} color='#FF3F4B' />
+                                                            </button>
                                                             <SwitchCategory
                                                                 isChecked={item.status}
                                                                 itemCategory={item}
@@ -217,7 +227,7 @@ export default function Categories({ categoryList }: CategoryProps) {
                         />
                     )
                 }
-                {/* {
+                {
                     modalDeleteVisible && (
                         <ModalDeleteCatergory
                             isOpen={modalDeleteVisible}
@@ -227,7 +237,7 @@ export default function Categories({ categoryList }: CategoryProps) {
                         />
                     )
 
-                } */}
+                }
             </div>
         </>
     )

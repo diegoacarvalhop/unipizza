@@ -9,7 +9,7 @@ import Link from "next/link";
 import { Footer } from "../../components/Footer";
 import { toast } from "react-toastify";
 import { SwitchProduct } from "../../components/ui/Switch";
-import { ModalEditProduct } from "../../components/Modal/ModalEditDeleteProduct";
+import { ModalDeleteProduct, ModalEditProduct } from "../../components/Modal/ModalEditDeleteProduct";
 
 export type ProductItemProps = {
     id: string;
@@ -42,26 +42,32 @@ export default function Products({ productList, categoryList }: ProductProps) {
     const [imageUrl, setImageUrl] = useState('http://localhost:3333/files/');
     const [modalItem, setModalItem] = useState<ProductItemProps>();
     const [modalEditVisible, setModalEditVisible] = useState(false);
-    const [search, setSearch] = useState(true);
+    const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
 
-    setTimeout(async function () {
-        setSearch(!search);
-    }, 5000);
+    // const [search, setSearch] = useState(true);
 
-    useEffect(() => {
-        async function getTables() {
-            const apiClient = setupAPIClient();
-            const response = await apiClient.get('/products');
-            setProducts(response.data);
-        }
-        getTables();
-    }, [search]);
+    // setTimeout(async function () {
+    //     setSearch(!search);
+    // }, 5000);
+
+    // useEffect(() => {
+    //     async function getTables() {
+    //         const apiClient = setupAPIClient();
+    //         const response = await apiClient.get('/products');
+    //         setProducts(response.data);
+    //     }
+    //     getTables();
+    // }, [search]);
 
     async function handleChangeCategory(event) {
         const apiClient = setupAPIClient();
         if (event.target.value === 'Tudo') {
             const response = await apiClient.get('/products');
-            setProducts(response.data);
+            if (response.data.length === 0) {
+                setProducts([]);
+            } else {
+                setProducts(response.data);
+            }
         }
         for (let x = 0; x < categoryList.length; x++) {
             if (categoryList[x].name === event.target.value) {
@@ -70,13 +76,18 @@ export default function Products({ productList, categoryList }: ProductProps) {
                         category_id: categoryList[x].id
                     }
                 });
-                setProducts(response.data);
+                if (response.data.length === 0) {
+                    setProducts([]);
+                } else {
+                    setProducts(response.data);
+                }
             }
         }
     }
 
     function handleCloseModal() {
         setModalEditVisible(false);
+        setModalDeleteVisible(false);
     }
 
     async function handleOpenModalEdit(product: ProductItemProps) {
@@ -89,6 +100,45 @@ export default function Products({ productList, categoryList }: ProductProps) {
             });
             setModalItem(response.data);
             setModalEditVisible(true);
+        } catch (error) {
+            toast.error('Houve um erro ao pesquisar o produto! Erro: ' + error.response.data.error, {
+                theme: 'dark'
+            });
+        }
+    }
+
+    async function handleDeleteProduct(product: ProductItemProps) {
+        try {
+            const apiClient = setupAPIClient();
+
+            const responseEdited = await apiClient.delete('/product', {
+                params: {
+                    product_id: product.id
+                }
+            });
+            toast.success('Produto ' + responseEdited.data.name + ' deletado com sucesso!', {
+                theme: 'dark'
+            });
+            const response = await apiClient.get('/products');
+            setProducts(response.data);
+            setModalDeleteVisible(false);
+        } catch (error) {
+            toast.error("Houve um erro ao deletar o produto! Erro: " + error.response.data.error, {
+                theme: 'dark'
+            });
+        }
+    }
+
+    async function handleOpenModalDelete(product: ProductItemProps) {
+        try {
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get('/product', {
+                params: {
+                    product_id: product.id,
+                }
+            });
+            setModalItem(response.data);
+            setModalDeleteVisible(true);
         } catch (error) {
             toast.error('Houve um erro ao pesquisar o produto! Erro: ' + error.response.data.error, {
                 theme: 'dark'
@@ -116,6 +166,7 @@ export default function Products({ productList, categoryList }: ProductProps) {
             });
         }
     }
+
 
     async function handleDisableProduct(id: string, disable: boolean) {
         try {
@@ -184,7 +235,7 @@ export default function Products({ productList, categoryList }: ProductProps) {
                     {
                         products.length === 0 && (
                             <span className={styles.emptyList}>
-                                Nenhum pedido aberto foi encontrado...
+                                Nenhum produto foi encontrado...
                             </span>
                         ) || (
                             <div className={styles.table}>
@@ -228,11 +279,12 @@ export default function Products({ productList, categoryList }: ProductProps) {
                                                                 onClick={() => handleOpenModalEdit(item)}>
                                                                 <FiEdit size={24} color='#D9D910' />
                                                             </button>
-                                                            {/* <button
+                                                            <button
                                                                 title="Deletar"
-                                                                className={styles.button}>
+                                                                className={styles.button}
+                                                                onClick={() => handleOpenModalDelete(item)}>
                                                                 <FiTrash size={24} color='#FF3F4B' />
-                                                            </button> */}
+                                                            </button>
                                                             <SwitchProduct
                                                                 isChecked={item.status}
                                                                 itemProduct={item}
@@ -257,6 +309,16 @@ export default function Products({ productList, categoryList }: ProductProps) {
                             onRequestClose={handleCloseModal}
                             product={modalItem}
                             handleEditProduct={handleEditProduct}
+                        />
+                    )
+                }
+                {
+                    modalDeleteVisible && (
+                        <ModalDeleteProduct
+                            isOpen={modalDeleteVisible}
+                            onRequestClose={handleCloseModal}
+                            product={modalItem}
+                            handleDeleteProduct={handleDeleteProduct}
                         />
                     )
                 }

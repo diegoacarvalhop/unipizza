@@ -1,7 +1,7 @@
 .container {
-    max-width: 900px;
-    margin: 4rem auto;
-    padding: 4rem 2rem;
+    width: 100%;    
+    margin: 1rem auto;
+    padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
@@ -15,7 +15,6 @@
 .containerHead {
     align-items: center;
     justify-content: space-between;
-    display: flex;
 
     svg {
         color: var(--green-700);
@@ -25,8 +24,9 @@
 
 .filter {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    padding-top: 10%;
 
     svg {
         margin-right: 1rem;
@@ -57,7 +57,7 @@
     table {
         thead {
             color: var(--white);
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         thead:before {
@@ -69,7 +69,7 @@
 
         tbody {
             color: var(--gray-100);
-            font-size: 1.1rem;
+            font-size: 0.8rem;
         }
 
         tbody:before {
@@ -87,8 +87,8 @@
 }
 
 .image {
-    width: 100px;
-    height: 100px;
+    width: 75px;
+    height: 75px;
     border-radius: 0.5rem;
 }
 
@@ -97,7 +97,7 @@
     flex-direction: column;
     padding: 1rem;
     word-break: break-all;
-    width: 450px;
+    width: 220px;
 
     span {
         padding: 0.5rem 0;
@@ -105,7 +105,7 @@
 
     .name {
         color: var(--white);
-        font-size: 1.5rem;
+        font-size: 1rem;
     }
 }
 
@@ -113,27 +113,25 @@
     color: var(--white);
     width: 100px;
     text-align: center;
-}
-
-.acao {
-    padding-bottom: 1rem;
-}
-
-.button {
-    background: transparent;
-    border: 0;
-    padding: 1rem 0 0 0.5rem;
-    margin-right: 1rem;
+    font-size: 1rem;
 }
 
 .total {
     color: var(--white);
     padding-top: 1rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .emptyList {
     padding-top: 3rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--gray-100);
+}
+
+.logo {
+    width: 190px;
+    height: 60px;
+    margin-top: 2%;
+    margin-left: 25%;
+    margin-right: 25%;
 }

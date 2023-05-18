@@ -19,7 +19,8 @@ class ListProductsMenuService {
                 id: true,
                 name: true,
                 description: true,
-                price: true
+                price: true,
+                banner: true
             }
         })
 

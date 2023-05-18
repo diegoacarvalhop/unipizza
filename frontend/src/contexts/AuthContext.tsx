@@ -43,7 +43,7 @@ export function signOut() {
         destroyCookie(undefined, '@unipizza.token');
         Router.push('/');
     } catch (error) {
-        toast.error('Erro ao tentar deslocar o usuário! ' + 'Erro: ' + error, {
+        toast.error('Erro ao tentar deslogar o usuário! ' + 'Erro: ' + error, {
             theme: 'dark'
         });
     }

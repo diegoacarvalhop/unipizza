@@ -75,7 +75,7 @@ export function SwitchTable({ isChecked, type }: InputPropsTable) {
 
 export function SwitchCategory({ isChecked, itemCategory, handleDisableCategory }: InputPropsCategory) {
     return (
-        <label className={styles.toggleSwitch}>
+        <label className={styles.toggleSwitchDisable}>
             <input
                 type="checkbox"
                 checked={isChecked}

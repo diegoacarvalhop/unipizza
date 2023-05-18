@@ -6,10 +6,11 @@ import { canSSRAuth } from "../../utils/canSSRAuth";
 import { Input, TextArea } from "../../components/ui/Input";
 import { ButtonGreen } from "../../components/ui/Button";
 import { Select } from "../../components/ui/Select";
-import { FiUpload } from 'react-icons/fi';
+import { FiList, FiUpload } from 'react-icons/fi';
 import { setupAPIClient } from "../../services/api";
 import { toast } from 'react-toastify';
 import { Footer } from "../../components/Footer";
+import Link from "next/link";
 
 type ItemProps = {
     id: string;
@@ -98,7 +99,16 @@ export default function Product({ categoryList }: CategoryProps) {
             <div>
                 <Header />
                 <main className={styles.container}>
-                    <h1>Cadastrar Produtos</h1>
+                    <div className={styles.containerHead}>
+                        <h1>Cadastrar Produtos</h1>
+                        <button
+                            title="Listar Categorias"
+                            className={styles.button}>
+                            <Link href="/products" legacyBehavior>
+                                <a><FiList size={50} /></a>
+                            </Link>
+                        </button>
+                    </div>
                     <form className={styles.form} onSubmit={handleProduct}>
 
                         <label className={styles.imageProduto}>

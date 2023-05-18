@@ -7,6 +7,7 @@
     flex-direction: column;
 
     h1 {
+        padding-top: 1rem;
         color: var(--white);
     }
 }
@@ -74,7 +75,7 @@
     flex-direction: column;
     padding: 1rem;
     word-break: break-all;
-    width: 390px;
+    width: 350px;
 
     span {
         padding: 0.5rem 0;

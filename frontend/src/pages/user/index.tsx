@@ -6,6 +6,8 @@ import { ButtonGreen } from "../../components/ui/Button";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
+import Link from "next/link";
+import { FiList } from "react-icons/fi";
 
 export default function User() {
     const { signUp } = useContext(AuthContext);
@@ -41,7 +43,16 @@ export default function User() {
             </Head>
             <Header />
             <div className={styles.container}>
-                <h1>Cadastrar Usuário</h1>
+                <div className={styles.containerHead}>
+                    <h1>Cadastrar Usuário</h1>
+                    <button
+                        title="Listar Categorias"
+                        className={styles.button}>
+                        <Link href="/users" legacyBehavior>
+                            <a><FiList size={50} /></a>
+                        </Link>
+                    </button>
+                </div>
                 <form onSubmit={handleSignUp}
                     className={styles.form}>
                     <Input

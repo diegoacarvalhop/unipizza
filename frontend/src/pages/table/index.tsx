@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 import { setupAPIClient } from "../../services/api";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { Footer } from "../../components/Footer";
+import Link from "next/link";
+import { FiList } from "react-icons/fi";
 
 export default function Table() {
     const [number, setNumber] = useState('1');
@@ -17,7 +19,7 @@ export default function Table() {
         const apiClient = setupAPIClient();
         try {
             const response = await apiClient.post('/table', {
-                    number: number
+                number: number
             });
             toast.success('Mesas cadastradas com sucesso!', {
                 theme: "dark"
@@ -37,7 +39,16 @@ export default function Table() {
             <div>
                 <Header />
                 <main className={styles.container}>
-                    <h1>Cadastrar Mesas</h1>
+                    <div className={styles.containerHead}>
+                        <h1>Cadastrar Mesas</h1>
+                        <button
+                            title="Listar Categorias"
+                            className={styles.button}>
+                            <Link href="/tables" legacyBehavior>
+                                <a><FiList size={50} /></a>
+                            </Link>
+                        </button>
+                    </div>
                     <form
                         onSubmit={handleTable}
                         className={styles.form}>
