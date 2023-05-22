@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { DetailUserService } from "../../services/user/DetailUserService";
+import { LoggedOutUserService } from "../../services/user/LoggedOutUserService";
 
-class DetailUserController {
+class LoggedOutUserController {
     async handle(req: Request, res: Response) {
 
         const user_id = req.user_id;
 
-        const service = new DetailUserService();
+        const service = new LoggedOutUserService();
 
         const user = await service.execute(user_id);
 
@@ -14,4 +14,4 @@ class DetailUserController {
     }
 }
 
-export { DetailUserController }
+export { LoggedOutUserController }

@@ -42,9 +42,18 @@ class AuthUserService {
             throw new Error("Senha incorreta!");
         }
 
-        if(!user.status) {
+        if (!user.status) {
             throw new Error('Usuário desabilitado!');
         }
+
+        await prismaClient.user.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                is_logged: true
+            }
+        });
 
         //Se deu tudo certo, vamos gerar o token pro usuário
         const token = sign(
@@ -55,7 +64,7 @@ class AuthUserService {
             process.env.JWT_SECRET,
             {
                 subject: user.id,
-                expiresIn: '30d'
+                expiresIn: '1d'
             }
         )
 

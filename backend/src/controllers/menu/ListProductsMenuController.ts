@@ -6,6 +6,8 @@ class ListProductsMenuController {
 
         const category_id = req.query.category_id as string;
 
+        console.log(category_id);
+
         const service = new ListProductsMenuService();
 
         const products = await service.execute({ category_id });

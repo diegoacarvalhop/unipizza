@@ -17,6 +17,7 @@ model User {
   email      String
   password   String
   status     Boolean    @default(true)
+  is_logged  Boolean    @default(false)
   created_at DateTime?  @default(now())
   updated_at DateTime?  @default(now())
   categories Category[]

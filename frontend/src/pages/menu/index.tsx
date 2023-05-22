@@ -33,20 +33,28 @@ export default function Menu() {
     const [products, setProducts] = useState<ProductItemProps[] | []>([]);
     const [categorySelected, setCategorySelected] = useState();
     const [imageUrl, setImageUrl] = useState('http://localhost:3333/files/');
+    
+    const apiClient = setupAPIClient();
 
-    useEffect(() => {
-        async function getMenu() {
-            const apiClient = setupAPIClient();
+    // useEffect(() => {
+    //     async function getMenu() {
+    //         const productsList = await apiClient.get('/menu');
+    //         if (productsList.data.length === 0) {
+    //             setProducts([]);
+    //         } else {
+    //             setProducts(productsList.data);
+    //         }
 
-            const productsList = await apiClient.get('/menu');
-            setProducts(productsList.data);
+    //         const categoriesList = await apiClient.get('/menu/categories');
+    //         if (categoriesList.data.length === 0) {
+    //             setCategories([]);
+    //         } else {
+    //             setCategories(categoriesList.data);
+    //         }
+    //     }
 
-            const categoriesList = await apiClient.get('/menu/categories');
-            setCategories(categoriesList.data);
-        }
-
-        getMenu();
-    })
+    //     getMenu();
+    // })
 
     async function handleChangeCategory(event) {
         const apiClient = setupAPIClient();
@@ -60,6 +68,7 @@ export default function Menu() {
         }
         for (let x = 0; x < categories.length; x++) {
             if (categories[x].name === event.target.value) {
+                console.log(categories[x].name + ' - ' + categories[x].id)
                 const response = await apiClient.get('/menu', {
                     params: {
                         category_id: categories[x].id

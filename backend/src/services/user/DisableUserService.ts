@@ -1,12 +1,29 @@
 import prismaClient from "../../prisma";
+import { UpdateUserService } from "./UpdateUserService";
 
 interface UserRequest {
     user_id: string;
     disable: boolean;
+    user_id_body: string;
 }
 
 class DisableUserService {
-    async execute({ user_id, disable }: UserRequest) {
+    async execute({ user_id, disable, user_id_body }: UserRequest) {
+
+        if(user_id === user_id_body) {
+            throw new Error('Você não pode desabilitar seu próprio usuário!');
+        }
+
+        const userBase = await prismaClient.user.findFirst({
+            where: {
+                id: user_id
+            }
+        });
+
+        if(userBase.is_logged) {
+            throw new Error('O usuário está logado!');
+        }
+
         const user = await prismaClient.user.update({
             where: {
                 id: user_id

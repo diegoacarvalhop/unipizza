@@ -17,6 +17,10 @@ interface InputPropsUser extends InputHTMLAttributes<HTMLInputElement> {
     handleDisableUser: (id: string, disable: boolean) => void;
 }
 
+interface InputPropsUserReadOnly extends InputHTMLAttributes<HTMLInputElement> {
+    isChecked: boolean;
+}
+
 interface InputPropsTableDisable extends InputHTMLAttributes<HTMLInputElement> {
     isChecked: boolean;
     itemTable: TableItemProps
@@ -25,7 +29,6 @@ interface InputPropsTableDisable extends InputHTMLAttributes<HTMLInputElement> {
 
 interface InputPropsTable extends InputHTMLAttributes<HTMLInputElement> {
     isChecked: boolean;
-    type: string;
 }
 
 interface InputPropsProduct extends InputHTMLAttributes<HTMLInputElement> {
@@ -60,7 +63,7 @@ export function SwitchTableDisable({ isChecked, itemTable, handleDisableTable }:
     );
 }
 
-export function SwitchTable({ isChecked, type }: InputPropsTable) {
+export function SwitchTable({ isChecked }: InputPropsTable) {
     return (
         <label className={styles.toggleSwitch}>
             <input
@@ -101,9 +104,22 @@ export function SwitchUser({ isChecked, itemUser, handleDisableUser }: InputProp
     );
 }
 
-export function SwitchProduct({ isChecked, itemProduct, handleDisableProduct }: InputPropsProduct) {
+export function SwitchUserReadOnly({ isChecked }: InputPropsUserReadOnly) {
     return (
         <label className={styles.toggleSwitch}>
+            <input
+                type="checkbox"
+                checked={isChecked}
+                readOnly />
+            <span
+                className={styles.switch} />
+        </label>
+    );
+}
+
+export function SwitchProduct({ isChecked, itemProduct, handleDisableProduct }: InputPropsProduct) {
+    return (
+        <label className={styles.toggleSwitchDisable}>
             <input
                 type="checkbox"
                 checked={isChecked}

@@ -9,7 +9,8 @@ class ListUserService {
                 name: true,
                 email: true,
                 password: true,
-                status: true               
+                status: true,
+                is_logged: true               
             }
         });
 

@@ -41,6 +41,7 @@ import { ChangePasswordUserController } from "./controllers/user/ChangePasswordU
 import { ListProductsMenuController } from "./controllers/menu/ListProductsMenuController";
 import { DeleteCategoryController } from "./controllers/category/DeleteCategoryController";
 import { DeleteProductController } from "./controllers/product/DeleteProductController";
+import { LoggedOutUserController } from "./controllers/user/LoggedOutUserController";
 
 const router = Router();
 
@@ -50,6 +51,7 @@ const upload = multer(uploadConfig.upload("./tmp"));
 router.post('/users', new CreateUserController().handle);
 router.post('/session', new AuthUserController().handle);
 router.get('/userinfo', isAuthenticated, new DetailUserController().handle);
+router.put('/user/logout', isAuthenticated, new LoggedOutUserController().handle);
 router.get('/users', isAuthenticated, new ListUserController().handle);
 router.put('/user/disable', isAuthenticated, new DisableUserController().handle);
 router.put('/user/update', isAuthenticated, new UpdateUserController().handle);

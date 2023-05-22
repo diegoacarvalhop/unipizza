@@ -9,13 +9,14 @@ import { toast } from 'react-toastify';
 import Link from 'next/link';
 import { Footer } from '../../components/Footer';
 import { ModalChangePasswordUser, ModalEditUser } from '../../components/Modal/ModalEditDeleteUser';
-import { SwitchUser } from '../../components/ui/Switch';
+import { SwitchTable, SwitchUser, SwitchUserReadOnly } from '../../components/ui/Switch';
 
 export type UserItemProps = {
     id: string;
     name: string;
     email: string;
     status: boolean;
+    is_logged: boolean;
 }
 
 export type UserPasswordProps = {
@@ -73,8 +74,8 @@ export default function Categories({ userList }: UserProps) {
     }
 
     async function handleOpenModalChangePassword(user: UserPasswordProps) {
-            setModalItemChangePassword(user);
-            setModalChangePasswordVisible(true);
+        setModalItemChangePassword(user);
+        setModalChangePasswordVisible(true);
     }
 
     async function handleEditUser(user: UserItemProps) {
@@ -178,7 +179,8 @@ export default function Categories({ userList }: UserProps) {
                                         <tr>
                                             <th className={styles.head}>Nome</th>
                                             <th className={styles.head}>E-mail</th>
-                                            <th className={styles.head}>Ação</th>
+                                            <th className={styles.headAcao}>Ação</th>
+                                            <th className={styles.headAcao}>Logado</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -213,6 +215,10 @@ export default function Categories({ userList }: UserProps) {
                                                                 isChecked={item.status}
                                                                 itemUser={item}
                                                                 handleDisableUser={handleDisableUser} />
+                                                        </td>
+                                                        <td className={styles.tdAcao}>
+                                                            <SwitchUserReadOnly
+                                                                isChecked={item.is_logged} />
                                                         </td>
                                                     </tr>
                                                 )

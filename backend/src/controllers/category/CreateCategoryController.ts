@@ -8,6 +8,8 @@ class CreateCategoryController {
         const { name } = req.body;
         const user_id = req.user_id;
 
+        console.log(user_id);
+
         const service = new CreateCategoryService();
 
         const category = await service.execute({ name, user_id });
