@@ -7,6 +7,9 @@ import logo from '../../../public/uni_pizza_logo.png';
 import { setupAPIClient } from "../../services/api";
 import { FiFilter } from "react-icons/fi";
 import { Footer } from "../../components/Footer";
+import { SwitchTableCallWaiter, SwitchTableCloseBill } from "../../components/ui/Switch";
+import { TableItemProps } from "../tables";
+import { toast } from "react-toastify";
 
 export type ProductItemProps = {
     id: string;
@@ -33,28 +36,41 @@ export default function Menu() {
     const [products, setProducts] = useState<ProductItemProps[] | []>([]);
     const [categorySelected, setCategorySelected] = useState();
     const [imageUrl, setImageUrl] = useState('http://localhost:3333/files/');
-    
+    const [table, setTable] = useState<TableItemProps | null>();
+
     const apiClient = setupAPIClient();
 
-    // useEffect(() => {
-    //     async function getMenu() {
-    //         const productsList = await apiClient.get('/menu');
-    //         if (productsList.data.length === 0) {
-    //             setProducts([]);
-    //         } else {
-    //             setProducts(productsList.data);
-    //         }
+    useEffect(() => {
+        async function getMenu() {
 
-    //         const categoriesList = await apiClient.get('/menu/categories');
-    //         if (categoriesList.data.length === 0) {
-    //             setCategories([]);
-    //         } else {
-    //             setCategories(categoriesList.data);
-    //         }
-    //     }
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var data = url.searchParams.get("table");
 
-    //     getMenu();
-    // })
+            const response = await apiClient.get('/menu/table', {
+                params: {
+                    table: data
+                }
+            });
+            setTable(response.data);
+
+            const productsList = await apiClient.get('/menu');
+            if (productsList.data.length === 0) {
+                setProducts([]);
+            } else {
+                setProducts(productsList.data);
+            }
+
+            const categoriesList = await apiClient.get('/menu/categories');
+            if (categoriesList.data.length === 0) {
+                setCategories([]);
+            } else {
+                setCategories(categoriesList.data);
+            }
+        }
+
+        getMenu();
+    })
 
     async function handleChangeCategory(event) {
         const apiClient = setupAPIClient();
@@ -83,6 +99,34 @@ export default function Menu() {
         }
     }
 
+    async function handleCallWaiter(id: string) {
+        try {
+            const response = await apiClient.put('/menu/call_waiter', {
+                table_id: id,
+                call_waiter: !table?.call_waiter
+            });
+            setTable(response.data);
+        } catch (error) {
+            toast.error("Ocorreu um erro ao chamar o garçom! Erro: " + error.response.data.error, {
+                theme: 'dark'
+            });
+        }
+    }
+
+    async function handleCloseBill(id: string) {
+        try {
+            const response = await apiClient.put('/menu/close_bill', {
+                table_id: id,
+                close_bill: !table?.close_bill
+            });
+            setTable(response.data);
+        } catch (error) {
+            toast.error("Ocorreu um erro ao pedir a conta! Erro: " + error.response.data.error, {
+                theme: 'dark'
+            });
+        }
+    }
+
     return (
         <>
             <Head>
@@ -97,7 +141,21 @@ export default function Menu() {
                 </Link>
                 <main className={styles.container}>
                     <div className={styles.containerHead}>
-                        <h1>Menu</h1>
+                        <h1>Menu - Mesa {table?.number}</h1>
+                        <div className={styles.actionTable}>
+                            <h4>Chamar Garçom</h4>
+                            <SwitchTableCallWaiter
+                                isChecked={table?.call_waiter}
+                                itemTable={table}
+                                handleCallWaiter={handleCallWaiter} />
+                        </div>
+                        <div className={styles.actionTable}>
+                            <h4>Pedir a Conta</h4>
+                            <SwitchTableCloseBill
+                                isChecked={table?.close_bill}
+                                itemTable={table}
+                                handleCloseBill={handleCloseBill} />
+                        </div>
                         <div className={styles.filter}>
                             <FiFilter size={30} />
                             <select

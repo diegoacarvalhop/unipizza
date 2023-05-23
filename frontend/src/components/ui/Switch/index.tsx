@@ -37,17 +37,17 @@ interface InputPropsProduct extends InputHTMLAttributes<HTMLInputElement> {
     handleDisableProduct: (id: string, table_call_waiter: boolean) => void;
 }
 
-// interface InputPropsTableCallWaiter extends InputHTMLAttributes<HTMLInputElement> {
-//     isChecked: boolean;
-//     itemTable: TableItemProps
-//     handleDisableTableCallWaiter: (id: string, table_call_waiter: boolean) => void;
-// }
+interface InputPropsTableCallWaiter extends InputHTMLAttributes<HTMLInputElement> {
+    isChecked: boolean;
+    itemTable: TableItemProps
+    handleCallWaiter: (id: string) => void;
+}
 
-// interface InputPropsTableCloseBill extends InputHTMLAttributes<HTMLInputElement> {
-//     isChecked: boolean;
-//     itemTable: TableItemProps
-//     handleDisableTableCloseBill: (id: string, table_close_bill: boolean) => void;
-// }
+interface InputPropsTableCloseBill extends InputHTMLAttributes<HTMLInputElement> {
+    isChecked: boolean;
+    itemTable: TableItemProps
+    handleCloseBill: (id: string) => void;
+}
 
 export function SwitchTableDisable({ isChecked, itemTable, handleDisableTable }: InputPropsTableDisable) {
     return (
@@ -131,30 +131,30 @@ export function SwitchProduct({ isChecked, itemProduct, handleDisableProduct }: 
     );
 }
 
-// export function SwitchTableCallWaiter({ isChecked, itemTable, handleDisableTableCallWaiter }: InputPropsTableCallWaiter) {
-//     return (
-//         <label className={styles.toggleSwitch}>
-//             <input
-//                 type="checkbox"
-//                 checked={isChecked}
-//                 onChange={() => handleDisableTableCallWaiter(itemTable.id, itemTable.table_call_waiter)} />
-//             <span
-//                 className={styles.switch}
-//                 title="Habilitar / Desabilitar" />
-//         </label>
-//     );
-// }
+export function SwitchTableCallWaiter({ isChecked, itemTable, handleCallWaiter }: InputPropsTableCallWaiter) {
+    return (
+        <label className={styles.toggleSwitchDisable}>
+            <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={() => handleCallWaiter(itemTable.id)} />
+            <span
+                className={styles.switch}
+                title="Habilitar / Desabilitar" />
+        </label>
+    );
+}
 
-// export function SwitchTableCloseBill({ isChecked, itemTable, handleDisableTableCloseBill }: InputPropsTableCloseBill) {
-//     return (
-//         <label className={styles.toggleSwitch}>
-//             <input
-//                 type="checkbox"
-//                 checked={isChecked}
-//                 onChange={() => handleDisableTableCloseBill(itemTable.id, itemTable.table_close_bill)} />
-//             <span
-//                 className={styles.switch}
-//                 title="Habilitar / Desabilitar" />
-//         </label>
-//     );
-// }
+export function SwitchTableCloseBill({ isChecked, itemTable, handleCloseBill }: InputPropsTableCloseBill) {
+    return (
+        <label className={styles.toggleSwitchDisable}>
+            <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={() => handleCloseBill(itemTable.id)} />
+            <span
+                className={styles.switch}
+                title="Habilitar / Desabilitar" />
+        </label>
+    );
+}

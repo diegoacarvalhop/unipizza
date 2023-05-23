@@ -42,6 +42,9 @@ import { ListProductsMenuController } from "./controllers/menu/ListProductsMenuC
 import { DeleteCategoryController } from "./controllers/category/DeleteCategoryController";
 import { DeleteProductController } from "./controllers/product/DeleteProductController";
 import { LoggedOutUserController } from "./controllers/user/LoggedOutUserController";
+import { ListTableMenuController } from "./controllers/menu/ListTableMenuController";
+import { CallWaiterMenuController } from "./controllers/menu/CallWaiterMenuController";
+import { CloseBillMenuController } from "./controllers/menu/CloseBillMenuController";
 
 const router = Router();
 
@@ -102,5 +105,8 @@ router.put('/payment', isAuthenticated, new FinishPaymentController().handle);
 //Rotas MENU
 router.get('/menu', new ListProductsMenuController().handle);
 router.get('/menu/categories', new ListCategoryController().handle);
+router.get('/menu/table', new ListTableMenuController().handle);
+router.put('/menu/call_waiter', new CallWaiterMenuController().handle);
+router.put('/menu/close_bill', new CloseBillMenuController().handle);
 
 export { router };

@@ -135,3 +135,11 @@
     margin-left: 25%;
     margin-right: 25%;
 }
+
+.actionTable {
+    display: flex;
+    margin-top: 1rem;
+    color: var(--white);
+    align-items: center;
+    justify-content: space-between;
+}
