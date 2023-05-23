@@ -101,11 +101,6 @@ export default function Options() {
                         }}>
                         <View style={styles.notification}>
                             <Text style={styles.buttonText}>Garçom</Text>
-                            {
-                                tablesCallWaiterNotification && (
-                                    <Feather name="bell" size={25} color="#101026" style={{ marginLeft: 18 }} />
-                                )
-                            }
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -116,11 +111,6 @@ export default function Options() {
                         }}>
                         <View style={styles.notification}>
                             <Text style={styles.buttonText}>Conta</Text>
-                            {
-                                tablesCloseBillNotification && (
-                                    <Feather name="bell" size={25} color="#101026" style={{ marginLeft: 18 }} />
-                                )
-                            }
                         </View>
                     </TouchableOpacity>
                 </View>

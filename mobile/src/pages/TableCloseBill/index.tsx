@@ -44,11 +44,10 @@ export default function TableCloseBill() {
     const [searchTable, setSearchTable] = useState(true);
     const [itemsCloseBill, setItemsCloseBill] = useState<CloseBillProps>();
     const [visibleBill, setVisibleBill] = useState(false);
-    const [money, setMoney] = useState('0');
-    const [pix, setPix] = useState('0');
-    const [debit, setDebit] = useState('0');
-    const [credit, setCredit] = useState('0');
-
+    const [money, setMoney] = useState('');
+    const [pix, setPix] = useState('');
+    const [debit, setDebit] = useState('');
+    const [credit, setCredit] = useState('');
 
     setTimeout(async function () {
         if (tables.length === 0) {
@@ -240,6 +239,7 @@ export default function TableCloseBill() {
                                 <TextInput
                                     style={[styles.input, { width: '50%', fontSize: 16, marginTop: 16 }]}
                                     placeholderTextColor="#F0F0F0"
+                                    placeholder='Valor Dinheiro'
                                     keyboardType="numeric"
                                     value={money}
                                     onChangeText={setMoney} />
@@ -293,11 +293,11 @@ export default function TableCloseBill() {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={handleFinishPayment}
-                                style={styles.buttonCloseBill}>
+                                style={[styles.buttonCloseBill, { opacity: !money && !pix && !debit && !credit ? 0.3 : 1 }]}
+                                disabled={!money && !pix && !debit && !credit}>
                                 <Text style={styles.buttonText}>Registrar Pagamento</Text>
                             </TouchableOpacity>
                         </View>
-
                     )
                 }
                 <Modal
