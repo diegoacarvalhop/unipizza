@@ -37,6 +37,11 @@ export default function Menu() {
     const [categorySelected, setCategorySelected] = useState();
     const [imageUrl, setImageUrl] = useState('http://localhost:3333/files/');
     const [table, setTable] = useState<TableItemProps | null>();
+    const [searchTable, setSearchTable] = useState(true);
+
+    setTimeout(async function () {
+        setSearchTable(!searchTable);
+    }, 5000);
 
     const apiClient = setupAPIClient();
 
@@ -61,7 +66,11 @@ export default function Menu() {
                 setProducts(productsList.data);
             }
 
-            const categoriesList = await apiClient.get('/menu/categories');
+            const categoriesList = await apiClient.get('/menu/categories', {
+                params: {
+                    disable: '1'
+                }
+            });
             if (categoriesList.data.length === 0) {
                 setCategories([]);
             } else {
@@ -70,12 +79,30 @@ export default function Menu() {
         }
 
         getMenu();
-    })
+    }, []);
+
+    useEffect(() => {
+        async function getTable() {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var data = url.searchParams.get("table");
+
+            const response = await apiClient.get('/menu/table', {
+                params: {
+                    table: data
+                }
+            });
+            setTable(response.data);
+        }
+
+        getTable();
+    }, [searchTable])
 
     async function handleChangeCategory(event) {
         const apiClient = setupAPIClient();
         if (event.target.value === 'Tudo') {
             const response = await apiClient.get('/menu');
+            console.log(response.data);
             if (response.data.length === 0) {
                 setProducts([]);
             } else {
@@ -84,17 +111,18 @@ export default function Menu() {
         }
         for (let x = 0; x < categories.length; x++) {
             if (categories[x].name === event.target.value) {
-                console.log(categories[x].name + ' - ' + categories[x].id)
                 const response = await apiClient.get('/menu', {
                     params: {
                         category_id: categories[x].id
                     }
                 });
-                if (response.data.length === 0) {
-                    setProducts([]);
-                } else {
-                    setProducts(response.data);
-                }
+                setProducts(response.data);
+                // console.log(products);
+                // if (response.data.length === 0) {
+                //     setProducts([]);
+                // } else {
+                    
+                // }
             }
         }
     }

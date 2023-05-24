@@ -43,11 +43,13 @@
 }
 
 .imageProduto {
-    width: 100%;
+    width:100%;
     height: 280px;
     background-color: var(--dark-900);
     border: 1px solid var(--gray-100);
     margin-bottom: 1rem;
+    // margin-left: 25%;
+    // margin-right: 25%;
     border-radius: 0.5rem;
     display: flex;
     justify-content: center;

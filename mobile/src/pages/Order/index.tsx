@@ -47,7 +47,11 @@ export default function Order() {
 
     useEffect(() => {
         async function getCategories() {
-            const response = await api.get('/categories');
+            const response = await api.get('/categories', {
+                params: {
+                    disable: '1'
+                }
+            });
             setCategories(response.data);
             setCategorySelected(response.data[0]);
         }
@@ -198,7 +202,10 @@ export default function Order() {
                         style={{ flex: 1, marginTop: 24 }}
                         data={items}
                         keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => <ListItem data={item} deleteItem={handleRemoveItem} />} />
+                        renderItem={({ item }) =>
+                            <ListItem data={item} deleteItem={handleRemoveItem} />
+                        }
+                    />
                     <Modal
                         transparent={true}
                         visible={modalCategoryVisible}
