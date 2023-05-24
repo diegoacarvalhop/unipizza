@@ -158,7 +158,7 @@ export default function Product({ categoryList }: CategoryProps) {
                         />
                         <Input
                             value={price}
-                            onChange={(event) => setPrice(event.target.value)}
+                            onChange={(event) => setPrice(event.target.value.replace(/[^0-9]/g, ""))}
                             type="text"
                             placeholder="Digite o preço do produto"
                         />

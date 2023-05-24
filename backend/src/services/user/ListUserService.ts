@@ -11,6 +11,9 @@ class ListUserService {
                 password: true,
                 status: true,
                 is_logged: true               
+            },
+            orderBy: {
+                name: 'asc'
             }
         });
 

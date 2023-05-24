@@ -90,6 +90,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function signOut() {
+    await api.put('/user/logout');
     await AsyncStorage.clear()
       .then(() => {
         setUser({
@@ -98,7 +99,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           email: '',
           token: ''
         })
-      })
+      });
   }
 
   return (
