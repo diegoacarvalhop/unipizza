@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
 
     item: {
         color: '#FFF',
-        fontSize: 16
+        fontSize: 16,
     }
 })

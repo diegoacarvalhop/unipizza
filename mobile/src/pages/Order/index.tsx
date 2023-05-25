@@ -198,6 +198,7 @@ export default function Order() {
                         </TouchableOpacity>
                     </View>
                     <FlatList
+                        scrollEnabled={false}
                         showsVerticalScrollIndicator={false}
                         style={{ flex: 1, marginTop: 24 }}
                         data={items}
