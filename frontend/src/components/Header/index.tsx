@@ -35,6 +35,9 @@ export function Header() {
                     <Link href="/users" legacyBehavior>
                         <a>Usuários</a>
                     </Link>
+                    <Link href="/relatorio" legacyBehavior>
+                        <a>Relatório</a>
+                    </Link>
                     <button onClick={signOut}>
                         <FiLogOut
                             size={25} />

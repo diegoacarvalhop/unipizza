@@ -102,7 +102,6 @@ export default function Menu() {
         const apiClient = setupAPIClient();
         if (event.target.value === 'Tudo') {
             const response = await apiClient.get('/menu');
-            console.log(response.data);
             if (response.data.length === 0) {
                 setProducts([]);
             } else {
@@ -117,12 +116,6 @@ export default function Menu() {
                     }
                 });
                 setProducts(response.data);
-                // console.log(products);
-                // if (response.data.length === 0) {
-                //     setProducts([]);
-                // } else {
-                    
-                // }
             }
         }
     }

@@ -79,7 +79,6 @@ export default function Categories({ userList }: UserProps) {
     }
 
     async function handleEditUser(user: UserItemProps) {
-        console.log(user);
         try {
             const apiClient = setupAPIClient();
 

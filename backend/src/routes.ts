@@ -45,6 +45,7 @@ import { LoggedOutUserController } from "./controllers/user/LoggedOutUserControl
 import { ListTableMenuController } from "./controllers/menu/ListTableMenuController";
 import { CallWaiterMenuController } from "./controllers/menu/CallWaiterMenuController";
 import { CloseBillMenuController } from "./controllers/menu/CloseBillMenuController";
+import { ListPaymentsController } from "./controllers/payment/ListPaymentsController";
 
 const router = Router();
 
@@ -101,6 +102,7 @@ router.put('/order/finish', isAuthenticated, new FinishOrderController().handle)
 router.get('/payment', isAuthenticated, new CreatePaymentController().handle);
 router.delete('/payment', isAuthenticated, new DeletePaymentController().handle);
 router.put('/payment', isAuthenticated, new FinishPaymentController().handle);
+router.get('/payments', isAuthenticated, new ListPaymentsController().handle);
 
 //Rotas MENU
 router.get('/menu', new ListProductsMenuController().handle);
