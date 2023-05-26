@@ -10,6 +10,12 @@ export function Input({ ...rest }: InputProps) {
     )
 }
 
+export function InputReport({ ...rest }: InputProps) {
+    return (
+        <input className={styles.inputReport} {...rest} />
+    )
+}
+
 export function TextArea({ ...rest }: TextAreaProps) {
     return (
         <textarea className={styles.input} {...rest}></textarea>

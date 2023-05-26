@@ -38,6 +38,18 @@ type SignUpProps = {
 
 export const AuthContext = createContext({} as AuthContextData);
 
+export async function signOut() {
+    try {
+        await api.put('/user/logout');
+        destroyCookie(undefined, '@unipizza.token');
+        Router.push('/');
+    } catch (error) {
+        toast.error('Erro ao tentar deslogar o usuário! ' + 'Erro: ' + error, {
+            theme: 'dark'
+        });
+    }
+}
+
 export function AuthProvider({ children }: AuthProviderProps) {
 
     const [user, setUser] = useState<UserProps>();
@@ -63,18 +75,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
 
     }, [])
-
-    async function signOut() {
-        try {
-            await api.put('/user/logout');
-            destroyCookie(undefined, '@unipizza.token');
-            Router.push('/');
-        } catch (error) {
-            toast.error('Erro ao tentar deslogar o usuário! ' + 'Erro: ' + error, {
-                theme: 'dark'
-            });
-        }
-    }
 
     async function signIn({ email, password }: SignInProps) {
         try {

@@ -102,7 +102,7 @@ router.put('/order/finish', isAuthenticated, new FinishOrderController().handle)
 router.get('/payment', isAuthenticated, new CreatePaymentController().handle);
 router.delete('/payment', isAuthenticated, new DeletePaymentController().handle);
 router.put('/payment', isAuthenticated, new FinishPaymentController().handle);
-router.get('/payments', isAuthenticated, new ListPaymentsController().handle);
+router.post('/payments', isAuthenticated, new ListPaymentsController().handle);
 
 //Rotas MENU
 router.get('/menu', new ListProductsMenuController().handle);

@@ -194,13 +194,13 @@ export default function Products({ productList, categoryList }: ProductProps) {
     }
 
     return (
-        <>
+         <>
             <Head>
                 <title>Listar Produtos - Uni Pizza</title>
             </Head>
             <div>
                 <Header />
-                <main className={styles.container}>
+               <main className={styles.container}>
                     <div className={styles.containerHead}>
                         <h1>Produtos</h1>
                         <div className={styles.filter}>
