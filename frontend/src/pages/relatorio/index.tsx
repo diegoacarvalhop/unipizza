@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 import { setupAPIClient } from '../../services/api';
 import { canSSRAuth } from '../../utils/canSSRAuth';
-import impressao from './impressao';
 import { Footer } from '../../components/Footer';
 import Head from 'next/head';
 import { Header } from '../../components/Header';
@@ -12,6 +9,10 @@ import { TableItemProps } from '../tables';
 import { UserItemProps } from '../users';
 import { FiDownload, FiFilter } from 'react-icons/fi';
 import { InputReport } from '../../components/ui/Input';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import moment from 'moment';
+import { toast } from 'react-toastify';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -39,6 +40,14 @@ interface PaymentProps {
 
 export default function Relatorio({ userList, tableList }: PaymentProps) {
 
+    const [filterUsers, setFilterUser] = useState(userList || []);
+    const [filterTables, setFilterTables] = useState(tableList || []);
+    const [filterDateFrom, setFilterDateFrom] = useState('');
+    const [filterDateTo, setFilterDateTo] = useState('');
+    const [typesPaymentSelected, setTypesPaymentSelected] = useState(undefined);
+    const [tablesSelected, setTablesSelected] = useState(undefined);
+    const [usersSelected, setUsersSelected] = useState(undefined);
+
     let dateState = '';
 
     useEffect(() => {
@@ -54,33 +63,26 @@ export default function Relatorio({ userList, tableList }: PaymentProps) {
         getDates();
     }, []);
 
-    const filterTypesPayment = [{
-        id: 1,
-        name: 'Dinheiro'
-    },
-    {
-        id: 2,
-        name: 'PIX'
-    },
-    {
-        id: 3,
-        name: 'Débito'
-    },
-    {
-        id: 4,
-        name: 'Crédito'
-    }];
+    const filterTypesPayment = [
+        {
+            id: 1,
+            name: 'Dinheiro'
+        },
+        {
+            id: 2,
+            name: 'PIX'
+        },
+        {
+            id: 3,
+            name: 'Débito'
+        },
+        {
+            id: 4,
+            name: 'Crédito'
+        }
+    ];
 
-    const [payments, setPayments] = useState<PaymentItemProps[] | []>();
-    const [filterUsers, setFilterUser] = useState(userList || []);
-    const [filterTables, setFilterTables] = useState(tableList || []);
-    const [filterDateFrom, setFilterDateFrom] = useState('');
-    const [filterDateTo, setFilterDateTo] = useState('');
-    const [typesPaymentSelected, setTypesPaymentSelected] = useState(undefined);
-    const [tablesSelected, setTablesSelected] = useState(undefined);
-    const [usersSelected, setUsersSelected] = useState(undefined);
-
-    async function downloadRelatorio() {
+    async function getPayments() {
         let table: TableItemProps = undefined;
         if (tablesSelected !== undefined) {
             for (let x = 0; x < filterTables.length; x++) {
@@ -109,9 +111,91 @@ export default function Relatorio({ userList, tableList }: PaymentProps) {
 
         const apiClient = setupAPIClient();
         const response = await apiClient.post('/payments', data);
-        setPayments(response.data);
 
-        impressao(payments, filterDateFrom, filterDateTo, typesPaymentSelected);
+        if (response.data.length === 0) {
+            toast.error('Não foi encontrado resultados para o filtro informado!', {
+                theme: 'dark'
+            });
+            return;
+        }
+
+        impressao(response.data, filterDateFrom, filterDateTo, typesPaymentSelected);
+    }
+
+    function impressao(payments: PaymentItemProps[], date_from, date_to, typePayment) {
+        pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+        const reportTitle = [
+            {
+                text: 'Uni Pizza - Relatório de Vendas' + (typePayment === undefined || typePayment === 'Pagamento' ? '' : (' - ' + typePayment)) + ' - (' + moment(date_from).format('DD/MM/YYYY') + ' - ' + moment(date_to).format('DD/MM/YYYY') + ')',
+                fontSize: 25,
+                bold: true,
+                margin: [15, 20, 0, 45], // left, top, right, bottom
+            }
+        ];
+
+        let total = 0;
+
+        const dados = payments.map((item) => {
+            total = total + Number(item.total_amount);
+            return [
+                { text: item.user?.name, fontSize: 12, marginLeft: 4 },
+                { text: 'Mesa' + ' ' + item.table.number, fontSize: 12, marginLeft: 4 },
+                { text: item.amount_money === '' ? 'R$ 0,00' : 'R$ ' + item.amount_money + ',00', fontSize: 12, marginLeft: 4 },
+                { text: item.amount_pix === '' ? 'R$ 0,00' : 'R$ ' + item.amount_pix + ',00', fontSize: 12, marginLeft: 4 },
+                { text: item.amount_debit === '' ? 'R$ 0,00' : 'R$ ' + item.amount_debit + ',00', fontSize: 12, marginLeft: 4 },
+                { text: item.amount_credit === '' ? 'R$ 0,00' : 'R$ ' + item.amount_credit + ',00', fontSize: 12, marginLeft: 4 },
+                { text: moment(item.created_at).format('DD/MM/YYYY'), fontSize: 12, marginLeft: 4 },
+                { text: item.total_amount === '' ? 'R$ 0,00' : 'R$ ' + item.total_amount + ',00', fontSize: 12, marginLeft: 4 },
+            ]
+        });
+
+        const details = [
+            {
+                table: {
+                    headerRows: 1,
+                    widths: ['*', '*', '*', '*', '*', '*', '*', '*'],
+                    body: [
+                        [
+                            { text: 'Usuário', bold: true, fontSize: 12, margin: [4, 40, 0, 10] },
+                            { text: 'Mesa', bold: true, fontSize: 12, margin: [4, 40, 0, 10] },
+                            { text: 'Dinheiro', bold: true, fontSize: 12, margin: [4, 40, 0, 10] },
+                            { text: 'PIX', bold: true, fontSize: 12, margin: [4, 40, 0, 10] },
+                            { text: 'Débito', bold: true, fontSize: 12, margin: [4, 40, 0, 10] },
+                            { text: 'Crédito', bold: true, fontSize: 12, margin: [4, 40, 0, 10] },
+                            { text: 'Data', bold: true, fontSize: 12, margin: [4, 40, 0, 10] },
+                            { text: 'Valor', bold: true, fontSize: 12, margin: [4, 40, 0, 10] }
+                        ],
+                        ...dados
+                    ]
+                },
+                layout: 'lightHorizontalLines' // headerLineOnly
+            }
+        ];
+
+        function rodape(currentPage, pageCount) {
+            return [
+                {
+                    text: 'Valor Total: R$ ' + total + ',00     -     Página ' + currentPage + ' de ' + pageCount,
+                    alignment: 'right',
+                    fontSize: 12,
+                    bold: true,
+                    margin: [0, 10, 20, 0] // left, top, right, bottom
+                }
+            ]
+        }
+
+        const docDefinitions = {
+            pageSize: 'A4',
+            pageMargins: [15, 50, 15, 40],
+            pageOrientation: 'landscape',
+            header: [reportTitle],
+            content: [details],
+            footer: rodape
+        }
+
+        pdfMake.createPdf(docDefinitions).open({}, window.open('', '_blank'));
+        // pdfMake.createPdf(docDefinitions).download('Relatório_de_Vendas_' + (typePayment === 'Pagamento' ? '' : (typePayment + '_')) + moment(date_from).format('DD-MM-YYYY') + '_' + moment(date_to).format('DD-MM-YYYY'));
     }
 
     return (
@@ -195,7 +279,7 @@ export default function Relatorio({ userList, tableList }: PaymentProps) {
                             <button
                                 title="Baixar relatório"
                                 className={styles.button}
-                                onClick={downloadRelatorio}>
+                                onClick={getPayments}>
                                 <FiDownload size={35} color='#3FFFA3' />
                             </button>
                         </div>

@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/pages/relatorio/data.js", "src/pages/relatorio/impressao.tsx", "src/pages/relatorio/index.tsx"  ],
+, "src/pages/relatorio/data.js", "src/pages/impressao/index.tsx", "src/pages/relatorio/index.tsx"  ],
   "exclude": [
     "node_modules"
   ]
