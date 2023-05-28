@@ -19,7 +19,7 @@ class DeletePaymentService {
                 paid: false
             },
             data: {
-                paid_draft: ''
+                paid_draft: '',
             }
         });
 

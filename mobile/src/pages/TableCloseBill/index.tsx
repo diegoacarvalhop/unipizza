@@ -157,22 +157,22 @@ export default function TableCloseBill() {
                     itemsCloseBill?.itemsCloseBill.length !== undefined && (
                         <View style={styles.header}>
                             <Grid>
-                                <Col size={13}>
+                                <Col size={10}>
                                     <Row>
                                         <Text style={styles.itemsTextHeader}>Item</Text>
                                     </Row>
                                 </Col>
-                                <Col size={3} style={{ alignItems: 'center' }}>
+                                <Col size={2} style={{ alignItems: 'flex-end' }}>
                                     <Row>
                                         <Text style={styles.itemsTextHeader}>Qtd</Text>
                                     </Row>
                                 </Col>
-                                <Col size={6} style={{ alignItems: 'center' }}>
+                                <Col size={6} style={{ alignItems: 'flex-end' }}>
                                     <Row>
                                         <Text style={styles.itemsTextHeader}>V.Un</Text>
                                     </Row>
                                 </Col>
-                                <Col size={5} style={{ alignItems: 'center' }}>
+                                <Col size={6} style={{ alignItems: 'flex-end' }}>
                                     <Row>
                                         <Text style={styles.itemsTextHeader}>V.Total</Text>
                                     </Row>
@@ -187,22 +187,22 @@ export default function TableCloseBill() {
                             return (
                                 <View key={item.id} style={styles.header}>
                                     <Grid>
-                                        <Col size={13}>
+                                        <Col size={10}>
                                             <Row>
                                                 <Text style={styles.itemsText}>{item.name}</Text>
                                             </Row>
                                         </Col>
-                                        <Col size={3} style={{ alignItems: 'center' }}>
+                                        <Col size={2} style={{ alignItems: 'flex-end' }}>
                                             <Row>
                                                 <Text style={styles.itemsText}>{item.amount}</Text>
                                             </Row>
                                         </Col>
-                                        <Col size={6} style={{ alignItems: 'center' }}>
+                                        <Col size={6} style={{ alignItems: 'flex-end' }}>
                                             <Row>
                                                 <Text style={styles.itemsText}>R$ {item.price},00</Text>
                                             </Row>
                                         </Col>
-                                        <Col size={5} style={{ alignItems: 'center' }}>
+                                        <Col size={6} style={{ alignItems: 'flex-end' }}>
                                             <Row>
                                                 <Text style={styles.itemsText}>R$ {Number(item.price) * item.amount},00</Text>
                                             </Row>
@@ -224,7 +224,7 @@ export default function TableCloseBill() {
                                 </Col>
                                 <Col size={10} style={{ alignItems: 'flex-end' }}>
                                     <Row>
-                                        <Text style={styles.itemsTextHeader}>R${itemsCloseBill?.totalBill},00</Text>
+                                        <Text style={styles.itemsTextHeader}>R$ {itemsCloseBill?.totalBill},00</Text>
                                     </Row>
                                 </Col>
                             </Grid>
@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
 
     itemsText: {
         color: '#FFF',
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center'
     },
 
