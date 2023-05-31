@@ -13,6 +13,7 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import moment from 'moment';
 import { toast } from 'react-toastify';
+import { ButtonGreen } from '../../components/ui/Button';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -83,6 +84,17 @@ export default function Relatorio({ userList, tableList }: PaymentProps) {
     ];
 
     async function getPayments() {
+
+        const de = new Date(filterDateFrom);
+        const para = new Date(filterDateTo);
+
+        if (de > para) {
+            toast.error('A data inicial não pode ser maior que a data final!', {
+                theme: 'dark'
+            });
+            return;
+        }
+
         let table: TableItemProps = undefined;
         if (tablesSelected !== undefined) {
             for (let x = 0; x < filterTables.length; x++) {
@@ -210,6 +222,28 @@ export default function Relatorio({ userList, tableList }: PaymentProps) {
                     <div className={styles.containerHead}>
                         <div className={styles.filter}>
                             <FiFilter size={30} />
+                            <select
+                                onChange={e => setUsersSelected(e.target.value)}
+                                value={usersSelected}>
+                                <option
+                                    key={undefined}>
+                                    Usuário
+                                </option>
+                                {
+                                    filterUsers.map((item, index) => {
+                                        return (
+                                            <option
+                                                key={item.id}
+                                                value={item.name}>
+                                                {item.name}
+                                            </option>
+                                        )
+                                    })
+                                }
+                            </select>
+                        </div>
+                        <div className={styles.filter}>
+                            <FiFilter size={30} />
                             <select value={typesPaymentSelected} onChange={e => setTypesPaymentSelected(e.target.value)}>
                                 <option
                                     key={undefined}>
@@ -244,33 +278,15 @@ export default function Relatorio({ userList, tableList }: PaymentProps) {
                                     })
                                 }
                             </select>
+                        </div>
+                        <div className={styles.filterCalendar}>
                             <FiFilter size={30} />
-                            <select
-                                onChange={e => setUsersSelected(e.target.value)}
-                                value={usersSelected}>
-                                <option
-                                    key={undefined}>
-                                    Usuário
-                                </option>
-                                {
-                                    filterUsers.map((item, index) => {
-                                        return (
-                                            <option
-                                                key={item.id}
-                                                value={item.name}>
-                                                {item.name}
-                                            </option>
-                                        )
-                                    })
-                                }
-                            </select>
-                            <span>De</span>
                             <InputReport
                                 value={filterDateFrom}
                                 onChange={(event) => setFilterDateFrom(event.target.value)}
                                 type="date"
                             />
-                            <span>Até</span>
+                            <FiFilter size={30} />
                             <InputReport
                                 value={filterDateTo}
                                 onChange={(event) => setFilterDateTo(event.target.value)}
@@ -280,7 +296,7 @@ export default function Relatorio({ userList, tableList }: PaymentProps) {
                                 title="Baixar relatório"
                                 className={styles.button}
                                 onClick={getPayments}>
-                                <FiDownload size={35} color='#3FFFA3' />
+                                <FiDownload size={35} />
                             </button>
                         </div>
                     </div>
