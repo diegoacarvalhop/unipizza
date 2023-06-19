@@ -242,7 +242,7 @@ export default function TableCloseBill() {
                                     placeholder='Valor Dinheiro'
                                     keyboardType="numeric"
                                     value={money}
-                                    onChangeText={setMoney} />
+                                    onChangeText={(value) => setMoney(value.replace(/[^0-9]/g, ""))} />
                             </View>
                             <View style={styles.paid}>
                                 <Text style={styles.textPaid}>PIX</Text>
@@ -252,7 +252,7 @@ export default function TableCloseBill() {
                                     placeholder='Valor PIX'
                                     keyboardType="numeric"
                                     value={pix}
-                                    onChangeText={setPix} />
+                                    onChangeText={(value) => setPix(value.replace(/[^0-9]/g, ""))} />
                             </View>
                             <View style={styles.paid}>
                                 <Text style={styles.textPaid}>Débito</Text>
@@ -262,7 +262,7 @@ export default function TableCloseBill() {
                                     placeholder='Valor Débito'
                                     keyboardType="numeric"
                                     value={debit}
-                                    onChangeText={setDebit} />
+                                    onChangeText={(value) => setDebit(value.replace(/[^0-9]/g, ""))} />
                             </View>
                             <View style={styles.paid}>
                                 <Text style={styles.textPaid}>Crédito</Text>
@@ -272,7 +272,7 @@ export default function TableCloseBill() {
                                     placeholder='Valor Crédito'
                                     keyboardType="numeric"
                                     value={credit}
-                                    onChangeText={setCredit} />
+                                    onChangeText={(value) => setCredit(value.replace(/[^0-9]/g, ""))} />
                             </View>
                         </View>
                     )

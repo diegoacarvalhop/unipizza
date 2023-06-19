@@ -99,6 +99,10 @@ export default function Order() {
     }
 
     async function handleAddItem() {
+        if(amount === '0' || amount === '') {
+            alert('A quantidade não pode ser 0 (zero) ou nulo!');
+            return;
+        }
         const response = await api.post('/order/add', {
             order_id: route.params.order_id,
             product_id: productSelected?.id,
@@ -111,6 +115,7 @@ export default function Order() {
             amount: amount
         }
         setItems(oldArray => [...oldArray, data]);
+        setAmount('1');
     }
 
     async function handleRemoveItem(item_id: string) {
