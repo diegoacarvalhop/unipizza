@@ -6,6 +6,8 @@ class ListPaymentsController {
 
         const { type_payment, table_id, user_id, date_from, date_to } = req.body;
 
+        console.log(req.body);
+
         const service = new ListPaymentsService();
 
         const payments = await service.execute({ type_payment, table_id, user_id, date_from, date_to });

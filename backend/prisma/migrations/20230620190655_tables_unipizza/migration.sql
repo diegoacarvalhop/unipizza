@@ -6,8 +6,8 @@ CREATE TABLE "users" (
     "password" TEXT NOT NULL,
     "status" BOOLEAN NOT NULL DEFAULT true,
     "is_logged" BOOLEAN NOT NULL DEFAULT false,
-    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -17,8 +17,8 @@ CREATE TABLE "categories" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "status" BOOLEAN NOT NULL DEFAULT true,
-    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "user_id" TEXT NOT NULL,
 
     CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
@@ -32,8 +32,8 @@ CREATE TABLE "products" (
     "description" TEXT NOT NULL,
     "banner" TEXT NOT NULL,
     "status" BOOLEAN NOT NULL DEFAULT true,
-    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "category_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
 
@@ -48,8 +48,8 @@ CREATE TABLE "orders" (
     "name" TEXT,
     "paid" BOOLEAN NOT NULL DEFAULT false,
     "paid_draft" TEXT NOT NULL DEFAULT '',
-    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "table_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
 
@@ -64,8 +64,8 @@ CREATE TABLE "tables" (
     "free" BOOLEAN NOT NULL DEFAULT true,
     "close_bill" BOOLEAN NOT NULL DEFAULT false,
     "call_waiter" BOOLEAN NOT NULL DEFAULT false,
-    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "user_id" TEXT NOT NULL,
 
     CONSTRAINT "tables_pkey" PRIMARY KEY ("id")
@@ -75,8 +75,8 @@ CREATE TABLE "tables" (
 CREATE TABLE "items" (
     "id" TEXT NOT NULL,
     "amount" INTEGER NOT NULL,
-    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "order_id" TEXT NOT NULL,
     "product_id" TEXT NOT NULL,
 
@@ -92,8 +92,8 @@ CREATE TABLE "payments" (
     "amount_money" TEXT NOT NULL DEFAULT '0',
     "amount_debit" TEXT NOT NULL DEFAULT '0',
     "amount_credit" TEXT NOT NULL DEFAULT '0',
-    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "user_id" TEXT NOT NULL,
     "table_id" TEXT NOT NULL,
 

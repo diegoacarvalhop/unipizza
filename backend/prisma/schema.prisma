@@ -18,8 +18,8 @@ model User {
   password   String
   status     Boolean    @default(true)
   is_logged  Boolean    @default(false)
-  created_at DateTime?  @default(now())
-  updated_at DateTime?  @default(now())
+  created_at DateTime?  @default(now()) @db.Timestamptz()
+  updated_at DateTime?  @default(now()) @db.Timestamptz()
   categories Category[]
   products   Product[]
   orders     Order[]
@@ -33,8 +33,8 @@ model Category {
   id         String    @id @default(uuid())
   name       String
   status     Boolean   @default(true)
-  created_at DateTime? @default(now())
-  updated_at DateTime? @default(now())
+  created_at DateTime? @default(now()) @db.Timestamptz()
+  updated_at DateTime? @default(now()) @db.Timestamptz()
   user       User      @relation(fields: [user_id], references: [id])
   user_id    String
   products   Product[]
@@ -49,8 +49,8 @@ model Product {
   description String
   banner      String
   status      Boolean   @default(true)
-  created_at  DateTime? @default(now())
-  updated_at  DateTime? @default(now())
+  created_at  DateTime? @default(now()) @db.Timestamptz()
+  updated_at  DateTime? @default(now()) @db.Timestamptz()
   category    Category  @relation(fields: [category_id], references: [id])
   category_id String
   user        User      @relation(fields: [user_id], references: [id])
@@ -67,8 +67,8 @@ model Order {
   name       String?
   paid       Boolean   @default(false)
   paid_draft String    @default("")
-  created_at DateTime? @default(now())
-  updated_at DateTime? @default(now())
+  created_at DateTime? @default(now()) @db.Timestamptz()
+  updated_at DateTime? @default(now()) @db.Timestamptz()
   table      Table     @relation(fields: [table_id], references: [id])
   table_id   String
   user       User      @relation(fields: [user_id], references: [id])
@@ -85,8 +85,8 @@ model Table {
   free        Boolean   @default(true)
   close_bill  Boolean   @default(false)
   call_waiter Boolean   @default(false)
-  created_at  DateTime? @default(now())
-  updated_at  DateTime? @default(now())
+  created_at  DateTime? @default(now()) @db.Timestamptz()
+  updated_at  DateTime? @default(now()) @db.Timestamptz()
   user        User      @relation(fields: [user_id], references: [id])
   user_id     String
   orders      Order[]
@@ -98,8 +98,8 @@ model Table {
 model Item {
   id         String    @id @default(uuid())
   amount     Int
-  created_at DateTime? @default(now())
-  updated_at DateTime? @default(now())
+  created_at DateTime? @default(now()) @db.Timestamptz()
+  updated_at DateTime? @default(now()) @db.Timestamptz()
   order      Order     @relation(fields: [order_id], references: [id])
   order_id   String
   product    Product   @relation(fields: [product_id], references: [id])
@@ -116,8 +116,8 @@ model Payment {
   amount_money  String    @default("0")
   amount_debit  String    @default("0")
   amount_credit String    @default("0")
-  created_at    DateTime? @default(now())
-  updated_at    DateTime? @default(now())
+  created_at    DateTime? @default(now()) @db.Timestamptz()
+  updated_at    DateTime? @default(now()) @db.Timestamptz()
   user          User      @relation(fields: [user_id], references: [id])
   user_id       String
   table         Table     @relation(fields: [table_id], references: [id])

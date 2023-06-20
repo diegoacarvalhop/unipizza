@@ -14,8 +14,15 @@ class ListPaymentsService {
         date_to = moment(
             date_to, "YYYY-MM-DD"
         ).add(
-            1, 'days'
-        ).format('YYYY-MM-DD');
+            23, 'hours'
+        ).add(
+            59, 'minutes'
+        ).add(
+            59, 'seconds'
+        ).format('YYYY-MM-DD HH:mm:ss');
+
+        console.log(date_from);
+        console.log(date_to);
 
         if (type_payment === undefined) {
             const payments = await prismaClient.payment.findMany({
@@ -51,6 +58,7 @@ class ListPaymentsService {
                     created_at: 'asc'
                 }
             })
+            console.log(payments)
             return payments;
         }
 
