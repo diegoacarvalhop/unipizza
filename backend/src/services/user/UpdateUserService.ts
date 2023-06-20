@@ -23,7 +23,8 @@ class UpdateUserService {
             select: {
                 id: true,
                 name: true,
-                email: true
+                email: true,
+                perfil: true
             }
         });
 

@@ -10,7 +10,17 @@ interface UserRequest {
 class DisableUserService {
     async execute({ user_id, disable, user_id_body }: UserRequest) {
 
-        if(user_id === user_id_body) {
+        const userPerfil = await prismaClient.user.findFirst({
+            where: {
+                id: user_id_body
+            }
+        });
+
+        if (userPerfil.perfil !== 'ADM') {
+            throw new Error('Você não tem o perfil de administrador para realizar esta ação!');
+        }
+
+        if (user_id === user_id_body) {
             throw new Error('Você não pode desabilitar seu próprio usuário!');
         }
 
@@ -20,7 +30,7 @@ class DisableUserService {
             }
         });
 
-        if(userBase.is_logged) {
+        if (userBase.is_logged) {
             throw new Error('O usuário está logado!');
         }
 

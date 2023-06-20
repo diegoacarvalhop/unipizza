@@ -6,10 +6,11 @@ interface UserRequest {
     name: string;
     email: string;
     password: string;
+    perfil: string;
 }
 
 class CreateUserService {
-    async execute({ name, email, password }: UserRequest) {
+    async execute({ name, email, password, perfil }: UserRequest) {
 
         //const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         //console.log(emailRegexp.test(email));
@@ -52,11 +53,13 @@ class CreateUserService {
                 name: name,
                 email: email,
                 password: passwordHash,
+                perfil: perfil
             },
             select: {
                 id: true,
                 name: true,
                 email: true,
+                perfil: true
             }
         })
 

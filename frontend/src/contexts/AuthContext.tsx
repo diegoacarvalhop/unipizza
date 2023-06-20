@@ -11,6 +11,7 @@ type UserProps = {
     id: string;
     name: string;
     email: string;
+    perfil: string;
 }
 
 type SignInProps = {
@@ -34,6 +35,7 @@ type SignUpProps = {
     name: string;
     email: string;
     password: string;
+    perfil: string;
 }
 
 export const AuthContext = createContext({} as AuthContextData);
@@ -61,12 +63,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (token) {
             api.get('/userinfo').then(response => {
-                const { id, name, email } = response.data;
+                const { id, name, email, perfil } = response.data;
 
                 setUser({
                     id,
                     name,
-                    email
+                    email,
+                    perfil
                 });
             }).catch(() => {
                 //Se deu erro, deslogamos o usuário.
@@ -74,16 +77,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
             })
         }
 
-    }, [])
+    }, []);
 
     async function signIn({ email, password }: SignInProps) {
         try {
             const response = await api.post('/session', {
                 email,
-                password
+                password,
             })
 
-            const { id, name, token } = response.data;
+            const { id, name, perfil, token } = response.data;
 
             setCookie(undefined, '@unipizza.token', token, {
                 maxAge: 60 * 60 * 24 * 30, //Expirar em 1 mês
@@ -93,7 +96,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setUser({
                 id,
                 name,
-                email
+                email,
+                perfil
             });
 
             //Passar para as próximas requisições o token
@@ -112,12 +116,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     }
 
-    async function signUp({ name, email, password }: SignUpProps) {
+    async function signUp({ name, email, password, perfil }: SignUpProps) {
         try {
             const response = await api.post('/users', {
                 name,
                 email,
-                password
+                password,
+                perfil
             });
 
             toast.success('Cadastro realizado com sucesso!', {

@@ -21,9 +21,6 @@ class ListPaymentsService {
             59, 'seconds'
         ).format('YYYY-MM-DD HH:mm:ss');
 
-        console.log(date_from);
-        console.log(date_to);
-
         if (type_payment === undefined) {
             const payments = await prismaClient.payment.findMany({
                 where: {
@@ -58,7 +55,6 @@ class ListPaymentsService {
                     created_at: 'asc'
                 }
             })
-            console.log(payments)
             return payments;
         }
 

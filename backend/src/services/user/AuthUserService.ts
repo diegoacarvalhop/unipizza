@@ -72,6 +72,7 @@ class AuthUserService {
             id: user.id,
             name: user.name,
             email: user.email,
+            perfil: user.perfil,
             token: token
         };
     }

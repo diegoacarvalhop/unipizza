@@ -15,6 +15,7 @@ export type UserItemProps = {
     id: string;
     name: string;
     email: string;
+    perfil: string;
     status: boolean;
     is_logged: boolean;
 }
@@ -57,20 +58,8 @@ export default function Categories({ userList }: UserProps) {
     }
 
     async function handleOpenModalEdit(user: UserItemProps) {
-        try {
-            const apiClient = setupAPIClient();
-            const response = await apiClient.get('/userinfo', {
-                params: {
-                    user_id: user.id,
-                }
-            });
-            setModalItem(response.data);
+            setModalItem(user);
             setModalEditVisible(true);
-        } catch (error) {
-            toast.error('Houve um erro ao pesquisar o usuário! Erro: ' + error.response.data.error, {
-                theme: 'dark'
-            });
-        }
     }
 
     async function handleOpenModalChangePassword(user: UserPasswordProps) {

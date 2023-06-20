@@ -4,6 +4,7 @@ CREATE TABLE "users" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "perfil" TEXT NOT NULL,
     "status" BOOLEAN NOT NULL DEFAULT true,
     "is_logged" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,

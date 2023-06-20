@@ -8,6 +8,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 
 export function Header() {
     const { user, signOut } = useContext(AuthContext);
+    console.log(user);
 
     return (
         <header className={styles.container}>
@@ -23,21 +24,27 @@ export function Header() {
                     <a className={styles.usuario}>{user?.name}</a>
                 </div>
                 <nav className={styles.nav}>
-                    <Link href="/tables" legacyBehavior>
-                        <a>Mesas</a>
-                    </Link>
-                    <Link href="/categories" legacyBehavior>
-                        <a>Categorias</a>
-                    </Link>
-                    <Link href="/products" legacyBehavior>
-                        <a>Produtos</a>
-                    </Link>
-                    <Link href="/users" legacyBehavior>
-                        <a>Usuários</a>
-                    </Link>
-                    <Link href="/relatorio" legacyBehavior>
-                        <a>Relatório</a>
-                    </Link>
+                    {
+                        user?.perfil === 'ADM' && (
+                            <>
+                                <Link href="/tables" legacyBehavior>
+                                    <a>Mesas</a>
+                                </Link>
+                                <Link href="/categories" legacyBehavior>
+                                    <a>Categorias</a>
+                                </Link>
+                                <Link href="/products" legacyBehavior>
+                                    <a>Produtos</a>
+                                </Link>
+                                <Link href="/users" legacyBehavior>
+                                    <a>Usuários</a>
+                                </Link>
+                                <Link href="/relatorio" legacyBehavior>
+                                    <a>Relatório</a>
+                                </Link>
+                            </>
+                        )
+                    }
                     <button onClick={signOut}>
                         <FiLogOut
                             size={25} />
